@@ -1,0 +1,251 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dependencies>
+   <includePath signature="/I..\..\..\..\..\Users\nblazevic\Desktop\STM32\Nouveau dossier /I..\..\..\workspace /I..\..\..\workspace\Ledcloud\cmsis_lib\include /I..\..\..\workspace\Ledcloud /I..\..\..\workspace\Ledcloud\cmsis /I..\..\..\..\..\Users\nblazevic\Desktop\STM32\Nouveau dossier\Show_10_Oszi /I..\..\..\..\..\Users\nblazevic\Desktop\STM32 /I..\..\.. /I..\..\..\workspace\Ledcloud\cmsis_boot /I..\..\..\workspace\Ledcloud\cmsis_lib">
+      <source file="..\..\..\tm_stm32f4_gpio.c" lastModified="14e6db3c99a">
+         <include file="..\..\..\tm_stm32f4_gpio.h"/>
+      </source>
+      <source file="..\..\..\cmsis_lib\source\stm32f4xx_gpio.c" lastModified="14b5ed009e6">
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+      </source>
+      <source file="..\..\..\tm_stm32f4_adc.h" lastModified="14c3c89a560">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_adc.h"/>
+         <include file="..\..\..\defines.h"/>
+         <include file="..\..\..\tm_stm32f4_gpio.h"/>
+      </source>
+      <source file="..\..\..\Touch.c" lastModified="153ae934927">
+         <include file="..\..\..\Touch.h"/>
+      </source>
+      <source file="..\..\..\cmsis_lib\include\stm32f4xx_syscfg.h" lastModified="14b5ed2f40e">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+      </source>
+      <source file="..\..\..\tm_stm32f4_adc.c" lastModified="15319999458">
+         <include file="..\..\..\tm_stm32f4_adc.h"/>
+      </source>
+      <source file="..\..\..\cmsis_lib\include\misc.h" lastModified="14b5ed04efd">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+      </source>
+      <source file="..\..\..\cmsis_lib\source\stm32f4xx_syscfg.c" lastModified="14b5ed2f410">
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_syscfg.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+      </source>
+      <source file="..\..\..\tm_stm32f4_dma.h" lastModified="1530a6cca46">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+         <include file="..\..\..\tm_stm32f4_dma.h"/>
+         <include file="..\..\..\defines.h"/>
+      </source>
+      <source file="..\..\..\tm_stm32f4_spi_dma.h" lastModified="14f1e6615fe">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_dma.h"/>
+         <include file="..\..\..\defines.h"/>
+         <include file="..\..\..\tm_stm32f4_dma.h"/>
+         <include file="..\..\..\tm_stm32f4_spi.h"/>
+      </source>
+      <source file="..\..\..\cmsis_lib\source\misc.c" lastModified="14b5ed04f02">
+         <include file="..\..\..\cmsis_lib\include\misc.h"/>
+      </source>
+      <source file="..\..\..\cmsis_lib\source\stm32f4xx_rcc.c" lastModified="14b5ecff589">
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+      </source>
+      <source file="..\..\..\tm_stm32f4_dma.c" lastModified="153c2f12712">
+         <include file="..\..\..\tm_stm32f4_dma.h"/>
+      </source>
+      <source file="..\..\..\tm_stm32f4_spi_dma.c" lastModified="14ed4326bbf">
+         <include file="..\..\..\tm_stm32f4_spi_dma.h"/>
+      </source>
+      <source file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h" lastModified="14b5ecff569">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+      </source>
+      <source file="..\..\..\cmsis_lib\source\stm32f4xx_adc.c" lastModified="1530ee0499e">
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_adc.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+      </source>
+      <source file="..\..\..\..\..\..\..\Users\nblazevic\Desktop\STM32\Nouveau dossier\Show_10_Oszi\defines.h" lastModified="1530a6fa787">
+      </source>
+      <source file="..\..\..\cmsis_lib\include\stm32f4xx_adc.h" lastModified="1530ee0499c">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+      </source>
+      <source file="..\..\..\adc.h" lastModified="153c84bff8d">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_adc.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_dma.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_tim.h"/>
+         <include file="..\..\..\cmsis_lib\include\misc.h"/>
+         <include file="..\..\..\Touch.h"/>
+         <include file="..\..\..\..\..\..\..\Users\nblazevic\Desktop\STM32\Nouveau dossier\Show_10_Oszi\menu.h"/>
+      </source>
+      <source file="..\..\..\tm_stm32f4_spi.h" lastModified="1530f07e5ab">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_spi.h"/>
+         <include file="..\..\..\defines.h"/>
+         <include file="..\..\..\tm_stm32f4_gpio.h"/>
+      </source>
+      <source file="..\..\..\cmsis\core_cmFunc.h" lastModified="14b5ecffe7a">
+      </source>
+      <source file="..\..\..\cmsis_lib\source\stm32f4xx_dma.c" lastModified="1530a6c2b3a">
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_dma.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+      </source>
+      <source file="..\..\..\cmsis\core_cm4_simd.h" lastModified="14b5ecffe66">
+      </source>
+      <source file="..\..\..\adc.c" lastModified="153d2327903">
+         <include file="..\..\..\adc.h"/>
+      </source>
+      <source file="..\..\..\tm_stm32f4_spi.c" lastModified="1530a75b0eb">
+         <include file="..\..\..\tm_stm32f4_spi.h"/>
+      </source>
+      <source file="..\..\..\cmsis_lib\include\stm32f4xx_dma.h" lastModified="1530a6c2b3a">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+      </source>
+      <source file="..\..\..\interrupt.h" lastModified="14b59eff9c4">
+      </source>
+      <source file="..\..\..\cmsis_boot\stm32f4xx.h" lastModified="14b5ecff9b4">
+         <include file="..\..\..\cmsis\core_cm4.h"/>
+         <include file="..\..\..\cmsis_boot\system_stm32f4xx.h"/>
+         <include file="..\..\..\cmsis_boot\stm32f4xx_conf.h"/>
+      </source>
+      <source file="..\..\..\interrupt.c" lastModified="14b5a138262">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_exti.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_syscfg.h"/>
+         <include file="..\..\..\cmsis_lib\include\misc.h"/>
+         <include file="..\..\..\interrupt.h"/>
+      </source>
+      <source file="..\..\..\..\..\..\..\Users\nblazevic\Desktop\STM32\Nouveau dossier\Show_10_Oszi\tm_stm32f4_gpio.h" lastModified="14ddd483b00">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
+         <include file="..\..\..\..\..\..\..\Users\nblazevic\Desktop\STM32\Nouveau dossier\Show_10_Oszi\defines.h"/>
+      </source>
+      <source file="..\..\..\tm_stm32f4_ili9341.h" lastModified="14e4f2a7bc2">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
+         <include file="..\..\..\defines.h"/>
+         <include file="..\..\..\tm_stm32f4_fonts.h"/>
+         <include file="..\..\..\tm_stm32f4_gpio.h"/>
+         <include file="..\..\..\tm_stm32f4_spi.h"/>
+         <include file="..\..\..\tm_stm32f4_dma.h"/>
+         <include file="..\..\..\tm_stm32f4_spi_dma.h"/>
+      </source>
+      <source file="..\..\..\cmsis_lib\include\stm32f4xx_exti.h" lastModified="14b5ed01b06">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+      </source>
+      <source file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h" lastModified="14b5ed009a4">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+      </source>
+      <source file="..\..\..\syscalls\syscalls.c" lastModified="1530a10164d">
+      </source>
+      <source file="..\..\..\cmsis_lib\source\stm32f4xx_spi.c" lastModified="15309fecc75">
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_spi.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+      </source>
+      <source file="..\..\..\tm_stm32f4_ili9341.c" lastModified="14e4f2a933b">
+         <include file="..\..\..\tm_stm32f4_ili9341.h"/>
+      </source>
+      <source file="..\..\..\cmsis_boot\stm32f4xx_conf.h" lastModified="14b5ed03839">
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_dma.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_exti.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_spi.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_syscfg.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_tim.h"/>
+         <include file="..\..\..\cmsis_lib\include\misc.h"/>
+      </source>
+      <source file="..\..\..\..\..\..\..\Users\nblazevic\Desktop\STM32\Nouveau dossier\Show_10_Oszi\tm_stm32f4_spi.h" lastModified="1530f07e5ab">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_spi.h"/>
+         <include file="..\..\..\..\..\..\..\Users\nblazevic\Desktop\STM32\Nouveau dossier\Show_10_Oszi\defines.h"/>
+         <include file="..\..\..\..\..\..\..\Users\nblazevic\Desktop\STM32\Nouveau dossier\Show_10_Oszi\tm_stm32f4_gpio.h"/>
+      </source>
+      <source file="..\..\..\cmsis_lib\include\stm32f4xx_spi.h" lastModified="15309fecc72">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+      </source>
+      <source file="..\..\..\cmsis\core_cmInstr.h" lastModified="14b5ecffe81">
+      </source>
+      <source file="..\..\..\..\..\..\..\Users\nblazevic\Desktop\STM32\Nouveau dossier\Show_10_Oszi\tm_stm32f4_ili9341.h" lastModified="14e4f2a7bc2">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
+         <include file="..\..\..\..\..\..\..\Users\nblazevic\Desktop\STM32\Nouveau dossier\Show_10_Oszi\defines.h"/>
+         <include file="..\..\..\tm_stm32f4_fonts.h"/>
+         <include file="..\..\..\..\..\..\..\Users\nblazevic\Desktop\STM32\Nouveau dossier\Show_10_Oszi\tm_stm32f4_gpio.h"/>
+         <include file="..\..\..\..\..\..\..\Users\nblazevic\Desktop\STM32\Nouveau dossier\Show_10_Oszi\tm_stm32f4_spi.h"/>
+         <include file="..\..\..\tm_stm32f4_dma.h"/>
+         <include file="..\..\..\tm_stm32f4_spi_dma.h"/>
+      </source>
+      <source file="..\..\..\osci.h" lastModified="153d245b53f">
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_adc.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+         <include file="..\..\..\tm_stm32f4_adc.h"/>
+         <include file="..\..\..\Touch.h"/>
+         <include file="..\..\..\..\..\..\..\Users\nblazevic\Desktop\STM32\Nouveau dossier\Show_10_Oszi\menu.h"/>
+         <include file="..\..\..\adc.h"/>
+      </source>
+      <source file="..\..\..\..\..\..\..\Users\nblazevic\Desktop\STM32\Nouveau dossier\Show_10_Oszi\menu.h" lastModified="153af108019">
+         <include file="..\..\..\..\..\..\..\Users\nblazevic\Desktop\STM32\Nouveau dossier\Show_10_Oszi\tm_stm32f4_ili9341.h"/>
+         <include file="..\..\..\tm_stm32f4_fonts.h"/>
+         <include file="..\..\..\..\..\..\..\Users\nblazevic\Desktop\STM32\Nouveau dossier\Show_10_Oszi\Touch.h"/>
+         <include file="..\..\..\osci.h"/>
+      </source>
+      <source file="..\..\..\tm_stm32f4_fonts.h" lastModified="14d851d55e5">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+         <include file="..\..\..\defines.h"/>
+      </source>
+      <source file="..\..\..\osci.c" lastModified="153d25f61cf">
+         <include file="..\..\..\osci.h"/>
+      </source>
+      <source file="..\..\..\tm_stm32f4_fonts.c" lastModified="14d851ceb1d">
+         <include file="..\..\..\tm_stm32f4_fonts.h"/>
+      </source>
+      <source file="..\..\..\defines.h" lastModified="1530a6fa787">
+      </source>
+      <source file="..\..\..\..\..\..\..\Users\nblazevic\Desktop\STM32\Nouveau dossier\Show_10_Oszi\Touch.h" lastModified="1531999f57c">
+      </source>
+      <source file="..\..\..\cmsis\core_cm4.h" lastModified="14b5ecffa77">
+         <include file="..\..\..\cmsis\core_cmInstr.h"/>
+         <include file="..\..\..\cmsis\core_cmFunc.h"/>
+         <include file="..\..\..\cmsis\core_cm4_simd.h"/>
+      </source>
+      <source file="..\..\..\cmsis_boot\system_stm32f4xx.h" lastModified="14b5ecff622">
+      </source>
+      <source file="..\..\..\cmsis_lib\source\stm32f4xx_tim.c" lastModified="153616be3c9">
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_tim.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+      </source>
+      <source file="..\..\..\tm_stm32f4_gpio.h" lastModified="14ddd483b00">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
+         <include file="..\..\..\defines.h"/>
+      </source>
+      <source file="..\..\..\cmsis_lib\include\stm32f4xx_tim.h" lastModified="153616be3c6">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+      </source>
+      <source file="..\..\..\cmsis_boot\startup\startup_stm32f4xx.c" lastModified="14b5ecff5af">
+      </source>
+      <source file="..\..\..\cmsis_boot\system_stm32f4xx.c" lastModified="153ce77587e">
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+      </source>
+      <source file="..\..\..\Touch.h" lastModified="153ae89e2f7">
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_adc.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+         <include file="..\..\..\tm_stm32f4_adc.h"/>
+      </source>
+      <source file="..\..\..\cmsis_lib\source\stm32f4xx_exti.c" lastModified="14b5ed01b26">
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_exti.h"/>
+      </source>
+   </includePath>
+</dependencies>

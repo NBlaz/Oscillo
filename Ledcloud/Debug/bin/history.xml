@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -g -nostartfiles -Map=Ledcloud.map -O0 --gc-sections -LC:\CooCox\CoIDE\configuration\ProgramData\Ledcloud -TC:\CooCox\CoIDE\configuration\ProgramData\Ledcloud/arm-gcc-link.ld -g">
+      <target file="Ledcloud.elf" lastModified="1542eef8749">
+         <source file="..\obj\stm32f4xx_syscfg.o" lastModified="153ae5adfc7"/>
+         <source file="..\obj\tm_stm32f4_spi_dma.o" lastModified="153ae5ae06a"/>
+         <source file="..\obj\tm_stm32f4_adc.o" lastModified="153ae5ae0ff"/>
+         <source file="..\obj\osci.o" lastModified="153d25f65ae"/>
+         <source file="..\obj\startup_stm32f4xx.o" lastModified="153ae5ae148"/>
+         <source file="..\obj\main.o" lastModified="1542eef8120"/>
+         <source file="..\obj\stm32f4xx_rcc.o" lastModified="153ae5ae260"/>
+         <source file="..\obj\stm32f4xx_adc.o" lastModified="153ae5ae2fe"/>
+         <source file="..\obj\tm_stm32f4_dma.o" lastModified="153c2f12b70"/>
+         <source file="..\obj\tm_stm32f4_spi.o" lastModified="153ae5ae3fb"/>
+         <source file="..\obj\menu.o" lastModified="1542eef8235"/>
+         <source file="..\obj\Touch.o" lastModified="153ae934c50"/>
+         <source file="..\obj\stm32f4xx_gpio.o" lastModified="153ae5ae5b1"/>
+         <source file="..\obj\system_stm32f4xx.o" lastModified="153ce775bc5"/>
+         <source file="..\obj\syscalls.o" lastModified="153ae5ae6c2"/>
+         <source file="..\obj\stm32f4xx_dma.o" lastModified="153ae5ae745"/>
+         <source file="..\obj\adc.o" lastModified="153d245bb12"/>
+         <source file="..\obj\stm32f4xx_spi.o" lastModified="153ae5ae7d5"/>
+         <source file="..\obj\tm_stm32f4_ili9341.o" lastModified="153ae5ae881"/>
+         <source file="..\obj\stm32f4xx_exti.o" lastModified="153ae5ae8e5"/>
+         <source file="..\obj\misc.o" lastModified="153ae5ae948"/>
+         <source file="..\obj\tm_stm32f4_gpio.o" lastModified="153ae5ae9bd"/>
+         <source file="..\obj\tm_stm32f4_fonts.o" lastModified="153ae5aea48"/>
+         <source file="..\obj\stm32f4xx_tim.o" lastModified="153ae5aeb3f"/>
+      </target>
+   </processor>
+</history>
