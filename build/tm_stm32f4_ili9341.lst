@@ -1,0 +1,3278 @@
+ARM GAS  /tmp/ccYW1LjA.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"tm_stm32f4_ili9341.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.TM_ILI9341_SendCommand,"ax",%progbits
+  18              		.align	1
+  19              		.global	TM_ILI9341_SendCommand
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	TM_ILI9341_SendCommand:
+  26              	.LFB134:
+  27              		.file 1 "Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c"
+   1:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** /**	
+   2:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * |----------------------------------------------------------------------
+   3:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * | Copyright (C) Tilen Majerle, 2014
+   4:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * | 
+   5:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * | This program is free software: you can redistribute it and/or modify
+   6:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * | it under the terms of the GNU General Public License as published by
+   7:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * | the Free Software Foundation, either version 3 of the License, or
+   8:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * | any later version.
+   9:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * |  
+  10:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * | This program is distributed in the hope that it will be useful,
+  11:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * | but WITHOUT ANY WARRANTY; without even the implied warranty of
+  12:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  13:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * | GNU General Public License for more details.
+  14:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * | 
+  15:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * | You should have received a copy of the GNU General Public License
+  16:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * | along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  17:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * |----------------------------------------------------------------------
+  18:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  */
+  19:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #include "tm_stm32f4_ili9341.h"
+  20:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #include "main.h"
+  21:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** /**
+  22:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * @brief  Orientation
+  23:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * @note   Used private
+  24:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  */
+  25:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** typedef enum {
+  26:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_Landscape,
+  27:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_Portrait
+  28:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** } TM_ILI9341_Orientation;
+  29:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+  30:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** /**
+  31:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * @brief  LCD options
+ARM GAS  /tmp/ccYW1LjA.s 			page 2
+
+
+  32:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  * @note   Used private
+  33:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****  */
+  34:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** typedef struct {
+  35:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	uint16_t width;
+  36:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	uint16_t height;
+  37:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_Orientation orientation; // 1 = portrait; 0 = landscape
+  38:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** } TM_ILI931_Options_t;
+  39:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+  40:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** /* Pin definitions */
+  41:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_RST_SET				//GPIO_SetBits(ILI9341_RST_PORT, ILI9341_RST_PIN)
+  42:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_RST_RESET			//GPIO_ResetBits(ILI9341_RST_PORT, ILI9341_RST_PIN)
+  43:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_CS_SET				HAL_GPIO_WritePin(ILI9341_CS_PORT, ILI9341_CS_PIN, GPIO_PIN_SET);
+  44:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_CS_RESET			HAL_GPIO_WritePin(ILI9341_CS_PORT, ILI9341_CS_PIN, GPIO_PIN_RESET);
+  45:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_WRX_SET				HAL_GPIO_WritePin(ILI9341_WRX_PORT, ILI9341_WRX_PIN, GPIO_PIN_SET);
+  46:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_WRX_RESET			HAL_GPIO_WritePin(ILI9341_WRX_PORT, ILI9341_WRX_PIN, GPIO_PIN_RESET);
+  47:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+  48:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** /* Private defines */
+  49:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_RESET				0x01
+  50:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_SLEEP_OUT			0x11
+  51:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_GAMMA				0x26
+  52:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_DISPLAY_OFF			0x28
+  53:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_DISPLAY_ON			0x29
+  54:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_COLUMN_ADDR			0x2A
+  55:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_PAGE_ADDR			0x2B
+  56:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_GRAM				0x2C
+  57:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_MAC					0x36
+  58:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_PIXEL_FORMAT		0x3A
+  59:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_WDB					0x51
+  60:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_WCD					0x53
+  61:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_RGB_INTERFACE		0xB0
+  62:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_FRC					0xB1
+  63:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_BPC					0xB5
+  64:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_DFC					0xB6
+  65:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_POWER1				0xC0
+  66:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_POWER2				0xC1
+  67:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_VCOM1				0xC5
+  68:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_VCOM2				0xC7
+  69:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_POWERA				0xCB
+  70:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_POWERB				0xCF
+  71:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_PGAMMA				0xE0
+  72:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_NGAMMA				0xE1
+  73:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_DTCA				0xE8
+  74:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_DTCB				0xEA
+  75:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_POWER_SEQ			0xED
+  76:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_3GAMMA_EN			0xF2
+  77:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_INTERFACE			0xF6
+  78:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** #define ILI9341_PRC					0xF7
+  79:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+  80:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** /* Pin functions */
+  81:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** uint16_t ILI9341_x;
+  82:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** uint16_t ILI9341_y;
+  83:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** TM_ILI931_Options_t ILI9341_Opts;
+  84:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** uint8_t ILI9341_INT_CalledFromPuts = 0;
+  85:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** /*Spi Handler provided in Init()*/
+  86:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** SPI_HandleTypeDef* lcdSPI;
+  87:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** /* Private functions */
+  88:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_InitLCD(void);
+ARM GAS  /tmp/ccYW1LjA.s 			page 3
+
+
+  89:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_SendData(uint8_t data);
+  90:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_SendCommand(uint8_t data);
+  91:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_Delay(volatile unsigned int delay);
+  92:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_SetCursorPosition(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
+  93:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_INT_Fill(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t color);
+  94:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+  95:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_Init(SPI_HandleTypeDef* lcdSPI_in) {
+  96:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+  97:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	lcdSPI=lcdSPI_in;
+  98:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+  99:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	GPIO_InitTypeDef LCD_GPIO_Init = {0};
+ 100:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/*Configure GPIO pin : ILI9341_CS_PIN */
+ 101:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	LCD_GPIO_Init.Pin = ILI9341_CS_PIN;
+ 102:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	LCD_GPIO_Init.Mode = GPIO_MODE_OUTPUT_PP;
+ 103:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	LCD_GPIO_Init.Pull = GPIO_NOPULL;
+ 104:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	HAL_GPIO_Init(ILI9341_CS_PORT, &LCD_GPIO_Init);
+ 105:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 106:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/*Configure GPIO pin : ILI9341_CS_PIN */
+ 107:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	LCD_GPIO_Init.Pin = ILI9341_WRX_PIN;
+ 108:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 109:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	HAL_GPIO_Init(ILI9341_WRX_PORT, &LCD_GPIO_Init);
+ 110:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 111:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/*CS high */
+ 112:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_CS_SET;
+ 113:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 114:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Init LCD */
+ 115:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_InitLCD();	
+ 116:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 117:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Set default settings */
+ 118:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_x = ILI9341_y = 0;
+ 119:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_Opts.width = ILI9341_WIDTH;
+ 120:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_Opts.height = ILI9341_HEIGHT;
+ 121:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_Opts.orientation = TM_ILI9341_Portrait;
+ 122:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 123:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Fill with white color */
+ 124:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_Fill(ILI9341_COLOR_WHITE);
+ 125:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 126:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 127:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_InitLCD(void) {
+ 128:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Force reset */
+ 129:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_RST_RESET;
+ 130:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_Delay(20000);
+ 131:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_RST_SET;
+ 132:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 133:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Delay for RST response */
+ 134:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_Delay(20000);
+ 135:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 136:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Software reset */
+ 137:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_RESET);
+ 138:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_Delay(50000);
+ 139:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 140:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_POWERA);
+ 141:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x39);
+ 142:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x2C);
+ 143:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 144:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x34);
+ 145:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x02);
+ARM GAS  /tmp/ccYW1LjA.s 			page 4
+
+
+ 146:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_POWERB);
+ 147:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 148:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0xC1);
+ 149:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x30);
+ 150:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_DTCA);
+ 151:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x85);
+ 152:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 153:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x78);
+ 154:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_DTCB);
+ 155:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 156:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 157:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_POWER_SEQ);
+ 158:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x64);
+ 159:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x03);
+ 160:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x12);
+ 161:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x81);
+ 162:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_PRC);
+ 163:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x20);
+ 164:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_POWER1);
+ 165:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x23);
+ 166:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_POWER2);
+ 167:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x10);
+ 168:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_VCOM1);
+ 169:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x3E);
+ 170:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x28);
+ 171:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_VCOM2);
+ 172:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x86);
+ 173:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_MAC);
+ 174:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x48);
+ 175:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_PIXEL_FORMAT);
+ 176:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x55);
+ 177:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_FRC);
+ 178:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 179:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x18);
+ 180:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_DFC);
+ 181:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x08);
+ 182:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x82);
+ 183:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x27);
+ 184:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_3GAMMA_EN);
+ 185:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 186:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_COLUMN_ADDR);
+ 187:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 188:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 189:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 190:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0xEF);
+ 191:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_PAGE_ADDR);
+ 192:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 193:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 194:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x01);
+ 195:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x3F);
+ 196:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_GAMMA);
+ 197:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x01);
+ 198:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_PGAMMA);
+ 199:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x0F);
+ 200:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x31);
+ 201:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x2B);
+ 202:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x0C);
+ARM GAS  /tmp/ccYW1LjA.s 			page 5
+
+
+ 203:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x0E);
+ 204:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x08);
+ 205:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x4E);
+ 206:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0xF1);
+ 207:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x37);
+ 208:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x07);
+ 209:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x10);
+ 210:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x03);
+ 211:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x0E);
+ 212:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x09);
+ 213:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 214:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_NGAMMA);
+ 215:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 216:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x0E);
+ 217:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x14);
+ 218:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x03);
+ 219:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x11);
+ 220:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x07);
+ 221:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x31);
+ 222:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0xC1);
+ 223:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x48);
+ 224:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x08);
+ 225:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x0F);
+ 226:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x0C);
+ 227:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x31);
+ 228:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x36);
+ 229:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x0F);
+ 230:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_SLEEP_OUT);
+ 231:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 232:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_Delay(1000000);
+ 233:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 234:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_DISPLAY_ON);
+ 235:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_GRAM);
+ 236:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 237:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 238:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_DisplayOn(void) {
+ 239:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_DISPLAY_ON);
+ 240:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 241:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 242:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_DisplayOff(void) {
+ 243:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_DISPLAY_OFF);
+ 244:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 245:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 246:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_SendCommand(uint8_t data) {
+  28              		.loc 1 246 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 8
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              	.LVL0:
+  33 0000 30B5     		push	{r4, r5, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 12
+  36              		.cfi_offset 4, -12
+  37              		.cfi_offset 5, -8
+  38              		.cfi_offset 14, -4
+  39 0002 83B0     		sub	sp, sp, #12
+  40              	.LCFI1:
+ARM GAS  /tmp/ccYW1LjA.s 			page 6
+
+
+  41              		.cfi_def_cfa_offset 24
+  42 0004 02AC     		add	r4, sp, #8
+  43 0006 04F8010D 		strb	r0, [r4, #-1]!
+ 247:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_WRX_RESET;
+  44              		.loc 1 247 0
+  45 000a 0022     		movs	r2, #0
+  46 000c 4021     		movs	r1, #64
+  47 000e 0C48     		ldr	r0, .L3
+  48              	.LVL1:
+  49 0010 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  50              	.LVL2:
+ 248:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_CS_RESET;
+  51              		.loc 1 248 0
+  52 0014 0B4D     		ldr	r5, .L3+4
+  53 0016 0022     		movs	r2, #0
+  54 0018 8021     		movs	r1, #128
+  55 001a 2846     		mov	r0, r5
+  56 001c FFF7FEFF 		bl	HAL_GPIO_WritePin
+  57              	.LVL3:
+ 249:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 250:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	HAL_SPI_Transmit(lcdSPI, &data, 1, 0x0000FFFFU);
+  58              		.loc 1 250 0
+  59 0020 4FF6FF73 		movw	r3, #65535
+  60 0024 0122     		movs	r2, #1
+  61 0026 2146     		mov	r1, r4
+  62 0028 0748     		ldr	r0, .L3+8
+  63 002a 0068     		ldr	r0, [r0]
+  64 002c FFF7FEFF 		bl	HAL_SPI_Transmit
+  65              	.LVL4:
+ 251:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_CS_SET;
+  66              		.loc 1 251 0
+  67 0030 0122     		movs	r2, #1
+  68 0032 8021     		movs	r1, #128
+  69 0034 2846     		mov	r0, r5
+  70 0036 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  71              	.LVL5:
+ 252:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+  72              		.loc 1 252 0
+  73 003a 03B0     		add	sp, sp, #12
+  74              	.LCFI2:
+  75              		.cfi_def_cfa_offset 12
+  76              		@ sp needed
+  77 003c 30BD     		pop	{r4, r5, pc}
+  78              	.L4:
+  79 003e 00BF     		.align	2
+  80              	.L3:
+  81 0040 00040240 		.word	1073873920
+  82 0044 00080240 		.word	1073874944
+  83 0048 00000000 		.word	lcdSPI
+  84              		.cfi_endproc
+  85              	.LFE134:
+  87              		.section	.text.TM_ILI9341_DisplayOn,"ax",%progbits
+  88              		.align	1
+  89              		.global	TM_ILI9341_DisplayOn
+  90              		.syntax unified
+  91              		.thumb
+  92              		.thumb_func
+ARM GAS  /tmp/ccYW1LjA.s 			page 7
+
+
+  93              		.fpu fpv4-sp-d16
+  95              	TM_ILI9341_DisplayOn:
+  96              	.LFB132:
+ 238:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_DISPLAY_ON);
+  97              		.loc 1 238 0
+  98              		.cfi_startproc
+  99              		@ args = 0, pretend = 0, frame = 0
+ 100              		@ frame_needed = 0, uses_anonymous_args = 0
+ 101 0000 08B5     		push	{r3, lr}
+ 102              	.LCFI3:
+ 103              		.cfi_def_cfa_offset 8
+ 104              		.cfi_offset 3, -8
+ 105              		.cfi_offset 14, -4
+ 239:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 106              		.loc 1 239 0
+ 107 0002 2920     		movs	r0, #41
+ 108 0004 FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 109              	.LVL6:
+ 240:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 110              		.loc 1 240 0
+ 111 0008 08BD     		pop	{r3, pc}
+ 112              		.cfi_endproc
+ 113              	.LFE132:
+ 115              		.section	.text.TM_ILI9341_DisplayOff,"ax",%progbits
+ 116              		.align	1
+ 117              		.global	TM_ILI9341_DisplayOff
+ 118              		.syntax unified
+ 119              		.thumb
+ 120              		.thumb_func
+ 121              		.fpu fpv4-sp-d16
+ 123              	TM_ILI9341_DisplayOff:
+ 124              	.LFB133:
+ 242:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_DISPLAY_OFF);
+ 125              		.loc 1 242 0
+ 126              		.cfi_startproc
+ 127              		@ args = 0, pretend = 0, frame = 0
+ 128              		@ frame_needed = 0, uses_anonymous_args = 0
+ 129 0000 08B5     		push	{r3, lr}
+ 130              	.LCFI4:
+ 131              		.cfi_def_cfa_offset 8
+ 132              		.cfi_offset 3, -8
+ 133              		.cfi_offset 14, -4
+ 243:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 134              		.loc 1 243 0
+ 135 0002 2820     		movs	r0, #40
+ 136 0004 FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 137              	.LVL7:
+ 244:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 138              		.loc 1 244 0
+ 139 0008 08BD     		pop	{r3, pc}
+ 140              		.cfi_endproc
+ 141              	.LFE133:
+ 143              		.section	.text.TM_ILI9341_SendData,"ax",%progbits
+ 144              		.align	1
+ 145              		.global	TM_ILI9341_SendData
+ 146              		.syntax unified
+ 147              		.thumb
+ARM GAS  /tmp/ccYW1LjA.s 			page 8
+
+
+ 148              		.thumb_func
+ 149              		.fpu fpv4-sp-d16
+ 151              	TM_ILI9341_SendData:
+ 152              	.LFB135:
+ 253:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 254:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_SendData(uint8_t data) {
+ 153              		.loc 1 254 0
+ 154              		.cfi_startproc
+ 155              		@ args = 0, pretend = 0, frame = 8
+ 156              		@ frame_needed = 0, uses_anonymous_args = 0
+ 157              	.LVL8:
+ 158 0000 30B5     		push	{r4, r5, lr}
+ 159              	.LCFI5:
+ 160              		.cfi_def_cfa_offset 12
+ 161              		.cfi_offset 4, -12
+ 162              		.cfi_offset 5, -8
+ 163              		.cfi_offset 14, -4
+ 164 0002 83B0     		sub	sp, sp, #12
+ 165              	.LCFI6:
+ 166              		.cfi_def_cfa_offset 24
+ 167 0004 02AC     		add	r4, sp, #8
+ 168 0006 04F8010D 		strb	r0, [r4, #-1]!
+ 255:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_WRX_SET;
+ 169              		.loc 1 255 0
+ 170 000a 0122     		movs	r2, #1
+ 171 000c 4021     		movs	r1, #64
+ 172 000e 0C48     		ldr	r0, .L11
+ 173              	.LVL9:
+ 174 0010 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 175              	.LVL10:
+ 256:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_CS_RESET;
+ 176              		.loc 1 256 0
+ 177 0014 0B4D     		ldr	r5, .L11+4
+ 178 0016 0022     		movs	r2, #0
+ 179 0018 8021     		movs	r1, #128
+ 180 001a 2846     		mov	r0, r5
+ 181 001c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 182              	.LVL11:
+ 257:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	HAL_SPI_Transmit(lcdSPI, &data, 1, 0x0000FFFFU);
+ 183              		.loc 1 257 0
+ 184 0020 4FF6FF73 		movw	r3, #65535
+ 185 0024 0122     		movs	r2, #1
+ 186 0026 2146     		mov	r1, r4
+ 187 0028 0748     		ldr	r0, .L11+8
+ 188 002a 0068     		ldr	r0, [r0]
+ 189 002c FFF7FEFF 		bl	HAL_SPI_Transmit
+ 190              	.LVL12:
+ 258:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_CS_SET;
+ 191              		.loc 1 258 0
+ 192 0030 0122     		movs	r2, #1
+ 193 0032 8021     		movs	r1, #128
+ 194 0034 2846     		mov	r0, r5
+ 195 0036 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 196              	.LVL13:
+ 259:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 197              		.loc 1 259 0
+ 198 003a 03B0     		add	sp, sp, #12
+ARM GAS  /tmp/ccYW1LjA.s 			page 9
+
+
+ 199              	.LCFI7:
+ 200              		.cfi_def_cfa_offset 12
+ 201              		@ sp needed
+ 202 003c 30BD     		pop	{r4, r5, pc}
+ 203              	.L12:
+ 204 003e 00BF     		.align	2
+ 205              	.L11:
+ 206 0040 00040240 		.word	1073873920
+ 207 0044 00080240 		.word	1073874944
+ 208 0048 00000000 		.word	lcdSPI
+ 209              		.cfi_endproc
+ 210              	.LFE135:
+ 212              		.section	.text.TM_ILI9341_SetCursorPosition,"ax",%progbits
+ 213              		.align	1
+ 214              		.global	TM_ILI9341_SetCursorPosition
+ 215              		.syntax unified
+ 216              		.thumb
+ 217              		.thumb_func
+ 218              		.fpu fpv4-sp-d16
+ 220              	TM_ILI9341_SetCursorPosition:
+ 221              	.LFB137:
+ 260:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 261:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_DrawPixel(uint16_t x, uint16_t y, uint32_t color) {
+ 262:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SetCursorPosition(x, y, x, y);
+ 263:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 264:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_GRAM);
+ 265:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(color >> 8);
+ 266:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(color & 0xFF);
+ 267:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 268:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 269:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 270:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_SetCursorPosition(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
+ 222              		.loc 1 270 0
+ 223              		.cfi_startproc
+ 224              		@ args = 0, pretend = 0, frame = 0
+ 225              		@ frame_needed = 0, uses_anonymous_args = 0
+ 226              	.LVL14:
+ 227 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 228              	.LCFI8:
+ 229              		.cfi_def_cfa_offset 24
+ 230              		.cfi_offset 3, -24
+ 231              		.cfi_offset 4, -20
+ 232              		.cfi_offset 5, -16
+ 233              		.cfi_offset 6, -12
+ 234              		.cfi_offset 7, -8
+ 235              		.cfi_offset 14, -4
+ 236 0002 0746     		mov	r7, r0
+ 237 0004 0D46     		mov	r5, r1
+ 238 0006 1646     		mov	r6, r2
+ 239 0008 1C46     		mov	r4, r3
+ 271:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_COLUMN_ADDR);
+ 240              		.loc 1 271 0
+ 241 000a 2A20     		movs	r0, #42
+ 242              	.LVL15:
+ 243 000c FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 244              	.LVL16:
+ 272:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(x1 >> 8);
+ARM GAS  /tmp/ccYW1LjA.s 			page 10
+
+
+ 245              		.loc 1 272 0
+ 246 0010 380A     		lsrs	r0, r7, #8
+ 247 0012 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 248              	.LVL17:
+ 273:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(x1 & 0xFF);
+ 249              		.loc 1 273 0
+ 250 0016 F8B2     		uxtb	r0, r7
+ 251 0018 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 252              	.LVL18:
+ 274:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(x2 >> 8);
+ 253              		.loc 1 274 0
+ 254 001c 300A     		lsrs	r0, r6, #8
+ 255 001e FFF7FEFF 		bl	TM_ILI9341_SendData
+ 256              	.LVL19:
+ 275:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(x2 & 0xFF);
+ 257              		.loc 1 275 0
+ 258 0022 F0B2     		uxtb	r0, r6
+ 259 0024 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 260              	.LVL20:
+ 276:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 277:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_PAGE_ADDR);
+ 261              		.loc 1 277 0
+ 262 0028 2B20     		movs	r0, #43
+ 263 002a FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 264              	.LVL21:
+ 278:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(y1 >> 8);
+ 265              		.loc 1 278 0
+ 266 002e 280A     		lsrs	r0, r5, #8
+ 267 0030 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 268              	.LVL22:
+ 279:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(y1 & 0xFF);
+ 269              		.loc 1 279 0
+ 270 0034 E8B2     		uxtb	r0, r5
+ 271 0036 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 272              	.LVL23:
+ 280:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(y2 >> 8);
+ 273              		.loc 1 280 0
+ 274 003a 200A     		lsrs	r0, r4, #8
+ 275 003c FFF7FEFF 		bl	TM_ILI9341_SendData
+ 276              	.LVL24:
+ 281:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(y2 & 0xFF);
+ 277              		.loc 1 281 0
+ 278 0040 E0B2     		uxtb	r0, r4
+ 279 0042 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 280              	.LVL25:
+ 282:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 281              		.loc 1 282 0
+ 282 0046 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 283              		.cfi_endproc
+ 284              	.LFE137:
+ 286              		.section	.text.TM_ILI9341_DrawPixel,"ax",%progbits
+ 287              		.align	1
+ 288              		.global	TM_ILI9341_DrawPixel
+ 289              		.syntax unified
+ 290              		.thumb
+ 291              		.thumb_func
+ 292              		.fpu fpv4-sp-d16
+ARM GAS  /tmp/ccYW1LjA.s 			page 11
+
+
+ 294              	TM_ILI9341_DrawPixel:
+ 295              	.LFB136:
+ 261:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SetCursorPosition(x, y, x, y);
+ 296              		.loc 1 261 0
+ 297              		.cfi_startproc
+ 298              		@ args = 0, pretend = 0, frame = 0
+ 299              		@ frame_needed = 0, uses_anonymous_args = 0
+ 300              	.LVL26:
+ 301 0000 10B5     		push	{r4, lr}
+ 302              	.LCFI9:
+ 303              		.cfi_def_cfa_offset 8
+ 304              		.cfi_offset 4, -8
+ 305              		.cfi_offset 14, -4
+ 306 0002 1446     		mov	r4, r2
+ 262:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 307              		.loc 1 262 0
+ 308 0004 0B46     		mov	r3, r1
+ 309 0006 0246     		mov	r2, r0
+ 310              	.LVL27:
+ 311 0008 FFF7FEFF 		bl	TM_ILI9341_SetCursorPosition
+ 312              	.LVL28:
+ 264:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(color >> 8);
+ 313              		.loc 1 264 0
+ 314 000c 2C20     		movs	r0, #44
+ 315 000e FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 316              	.LVL29:
+ 265:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(color & 0xFF);
+ 317              		.loc 1 265 0
+ 318 0012 C4F30720 		ubfx	r0, r4, #8, #8
+ 319 0016 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 320              	.LVL30:
+ 266:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 321              		.loc 1 266 0
+ 322 001a E0B2     		uxtb	r0, r4
+ 323 001c FFF7FEFF 		bl	TM_ILI9341_SendData
+ 324              	.LVL31:
+ 267:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 325              		.loc 1 267 0
+ 326 0020 10BD     		pop	{r4, pc}
+ 327              		.cfi_endproc
+ 328              	.LFE136:
+ 330              		.section	.text.TM_ILI9341_INT_Fill,"ax",%progbits
+ 331              		.align	1
+ 332              		.global	TM_ILI9341_INT_Fill
+ 333              		.syntax unified
+ 334              		.thumb
+ 335              		.thumb_func
+ 336              		.fpu fpv4-sp-d16
+ 338              	TM_ILI9341_INT_Fill:
+ 339              	.LFB139:
+ 283:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 284:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_Fill(uint32_t color) {
+ 285:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Fill entire screen */
+ 286:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_INT_Fill(0, 0, ILI9341_Opts.width - 1, ILI9341_Opts.height, color);
+ 287:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 288:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 289:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_INT_Fill(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t color) {
+ARM GAS  /tmp/ccYW1LjA.s 			page 12
+
+
+ 340              		.loc 1 289 0
+ 341              		.cfi_startproc
+ 342              		@ args = 4, pretend = 0, frame = 131072
+ 343              		@ frame_needed = 0, uses_anonymous_args = 0
+ 344              	.LVL32:
+ 345 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 346              	.LCFI10:
+ 347              		.cfi_def_cfa_offset 20
+ 348              		.cfi_offset 4, -20
+ 349              		.cfi_offset 5, -16
+ 350              		.cfi_offset 6, -12
+ 351              		.cfi_offset 7, -8
+ 352              		.cfi_offset 14, -4
+ 353 0002 ADF5003D 		sub	sp, sp, #131072
+ 354              	.LCFI11:
+ 355              		.cfi_def_cfa_offset 131092
+ 356 0006 81B0     		sub	sp, sp, #4
+ 357              	.LCFI12:
+ 358              		.cfi_def_cfa_offset 131096
+ 359 0008 0746     		mov	r7, r0
+ 360 000a 0C46     		mov	r4, r1
+ 361 000c 1646     		mov	r6, r2
+ 362 000e 1D46     		mov	r5, r3
+ 290:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	uint32_t pixels_count;
+ 291:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 292:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Set cursor position */
+ 293:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SetCursorPosition(x0, y0, x1, y1);
+ 363              		.loc 1 293 0
+ 364 0010 FFF7FEFF 		bl	TM_ILI9341_SetCursorPosition
+ 365              	.LVL33:
+ 294:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 295:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Set command for GRAM data */
+ 296:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_GRAM);
+ 366              		.loc 1 296 0
+ 367 0014 2C20     		movs	r0, #44
+ 368 0016 FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 369              	.LVL34:
+ 297:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 298:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Calculate pixels count */
+ 299:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	pixels_count = (x1 - x0 + 1) * (y1 - y0 + 1);
+ 370              		.loc 1 299 0
+ 371 001a F61B     		subs	r6, r6, r7
+ 372 001c 2C1B     		subs	r4, r5, r4
+ 373 001e 0134     		adds	r4, r4, #1
+ 374 0020 06FB0444 		mla	r4, r6, r4, r4
+ 375              	.LVL35:
+ 300:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 301:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Send everything */
+ 302:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_CS_RESET;
+ 376              		.loc 1 302 0
+ 377 0024 0022     		movs	r2, #0
+ 378 0026 8021     		movs	r1, #128
+ 379 0028 2048     		ldr	r0, .L25
+ 380 002a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 381              	.LVL36:
+ 303:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_WRX_SET;
+ 382              		.loc 1 303 0
+ARM GAS  /tmp/ccYW1LjA.s 			page 13
+
+
+ 383 002e 0122     		movs	r2, #1
+ 384 0030 4021     		movs	r1, #64
+ 385 0032 1F48     		ldr	r0, .L25+4
+ 386 0034 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 387              	.LVL37:
+ 304:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 305:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Go to 16-bit SPI mode 
+ 306:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_SPI_SetDataSize(ILI9341_SPI, TM_SPI_DataSize_16b);*/
+ 307:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	//lcdSPI->Init.DataSize = SPI_DATASIZE_16BIT;
+ 308:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	//if (HAL_SPI_Init(lcdSPI) != HAL_OK)
+ 309:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	//{
+ 310:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****     //	Error_Handler();
+ 311:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****   	//}
+ 312:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 313:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Send first 65535 bytes, SPI MUST BE IN 16-bit MODE */
+ 314:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****   	uint16_t colordata[0xFFFF]={color};
+ 388              		.loc 1 314 0
+ 389 0038 1E4A     		ldr	r2, .L25+8
+ 390 003a 0021     		movs	r1, #0
+ 391 003c 6846     		mov	r0, sp
+ 392 003e FFF7FEFF 		bl	memset
+ 393              	.LVL38:
+ 394 0042 0DF50033 		add	r3, sp, #131072
+ 395 0046 1833     		adds	r3, r3, #24
+ 396 0048 1B88     		ldrh	r3, [r3]
+ 397 004a ADF80030 		strh	r3, [sp]	@ movhi
+ 315:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	//TM_SPI_DMA_SendHalfWord(ILI9341_SPI, color, (pixels_count > 0xFFFF) ? 0xFFFF : pixels_count);
+ 316:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 317:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 318:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	HAL_SPI_Transmit_DMA(lcdSPI, (uint8_t *)colordata, 2*((pixels_count > 0xFFFF) ? 0xFFFF : pixels_co
+ 398              		.loc 1 318 0
+ 399 004e 4FF6FF72 		movw	r2, #65535
+ 400 0052 A242     		cmp	r2, r4
+ 401 0054 28BF     		it	cs
+ 402 0056 2246     		movcs	r2, r4
+ 403 0058 5200     		lsls	r2, r2, #1
+ 404 005a 92B2     		uxth	r2, r2
+ 405 005c 6946     		mov	r1, sp
+ 406 005e 164B     		ldr	r3, .L25+12
+ 407 0060 1868     		ldr	r0, [r3]
+ 408 0062 FFF7FEFF 		bl	HAL_SPI_Transmit_DMA
+ 409              	.LVL39:
+ 319:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	while (HAL_SPI_GetState(lcdSPI)==HAL_SPI_STATE_BUSY);
+ 410              		.loc 1 319 0
+ 411 0066 144D     		ldr	r5, .L25+12
+ 412              	.L18:
+ 413              		.loc 1 319 0 is_stmt 0 discriminator 1
+ 414 0068 2868     		ldr	r0, [r5]
+ 415 006a FFF7FEFF 		bl	HAL_SPI_GetState
+ 416              	.LVL40:
+ 417 006e 0228     		cmp	r0, #2
+ 418 0070 FAD0     		beq	.L18
+ 320:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 321:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Check again */
+ 322:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	if (pixels_count > 0xFFFF) {
+ 419              		.loc 1 322 0 is_stmt 1
+ 420 0072 B4F5803F 		cmp	r4, #65536
+ARM GAS  /tmp/ccYW1LjA.s 			page 14
+
+
+ 421 0076 08D2     		bcs	.L24
+ 422              	.LVL41:
+ 423              	.L19:
+ 323:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		/* Send remaining data */
+ 324:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		HAL_SPI_Transmit_DMA(lcdSPI, (uint8_t *)colordata, 2*(pixels_count - 0xFFFF));
+ 325:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		//TM_SPI_DMA_SendHalfWord(ILI9341_SPI, color, pixels_count - 0xFFFF);
+ 326:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		/* Wait till done */
+ 327:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		while (HAL_SPI_GetState(lcdSPI)==HAL_SPI_STATE_BUSY);
+ 328:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		
+ 329:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 330:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 331:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_CS_SET;
+ 424              		.loc 1 331 0
+ 425 0078 0122     		movs	r2, #1
+ 426 007a 8021     		movs	r1, #128
+ 427 007c 0B48     		ldr	r0, .L25
+ 428 007e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 429              	.LVL42:
+ 332:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 333:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Go back to 8-bit SPI mode
+ 334:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	lcdSPI->Init.DataSize = SPI_DATASIZE_8BIT;
+ 335:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	if (HAL_SPI_Init(lcdSPI) != HAL_OK)
+ 336:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	{
+ 337:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****     	Error_Handler();
+ 338:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****   	} */
+ 339:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 430              		.loc 1 339 0
+ 431 0082 0DF5003D 		add	sp, sp, #131072
+ 432 0086 01B0     		add	sp, sp, #4
+ 433              	.LCFI13:
+ 434              		.cfi_remember_state
+ 435              		.cfi_def_cfa_offset 20
+ 436              		@ sp needed
+ 437 0088 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 438              	.LVL43:
+ 439              	.L24:
+ 440              	.LCFI14:
+ 441              		.cfi_restore_state
+ 324:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		//TM_SPI_DMA_SendHalfWord(ILI9341_SPI, color, pixels_count - 0xFFFF);
+ 442              		.loc 1 324 0
+ 443 008a 0C4B     		ldr	r3, .L25+16
+ 444 008c 2344     		add	r3, r3, r4
+ 445 008e 5B00     		lsls	r3, r3, #1
+ 446 0090 9AB2     		uxth	r2, r3
+ 447 0092 6946     		mov	r1, sp
+ 448 0094 084B     		ldr	r3, .L25+12
+ 449 0096 1868     		ldr	r0, [r3]
+ 450 0098 FFF7FEFF 		bl	HAL_SPI_Transmit_DMA
+ 451              	.LVL44:
+ 327:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		
+ 452              		.loc 1 327 0
+ 453 009c 064C     		ldr	r4, .L25+12
+ 454              	.LVL45:
+ 455              	.L20:
+ 327:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		
+ 456              		.loc 1 327 0 is_stmt 0 discriminator 1
+ 457 009e 2068     		ldr	r0, [r4]
+ARM GAS  /tmp/ccYW1LjA.s 			page 15
+
+
+ 458 00a0 FFF7FEFF 		bl	HAL_SPI_GetState
+ 459              	.LVL46:
+ 460 00a4 0228     		cmp	r0, #2
+ 461 00a6 FAD0     		beq	.L20
+ 462 00a8 E6E7     		b	.L19
+ 463              	.L26:
+ 464 00aa 00BF     		.align	2
+ 465              	.L25:
+ 466 00ac 00080240 		.word	1073874944
+ 467 00b0 00040240 		.word	1073873920
+ 468 00b4 FEFF0100 		.word	131070
+ 469 00b8 00000000 		.word	lcdSPI
+ 470 00bc 0100FF7F 		.word	2147418113
+ 471              		.cfi_endproc
+ 472              	.LFE139:
+ 474              		.section	.text.TM_ILI9341_Fill,"ax",%progbits
+ 475              		.align	1
+ 476              		.global	TM_ILI9341_Fill
+ 477              		.syntax unified
+ 478              		.thumb
+ 479              		.thumb_func
+ 480              		.fpu fpv4-sp-d16
+ 482              	TM_ILI9341_Fill:
+ 483              	.LFB138:
+ 284:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Fill entire screen */
+ 484              		.loc 1 284 0 is_stmt 1
+ 485              		.cfi_startproc
+ 486              		@ args = 0, pretend = 0, frame = 0
+ 487              		@ frame_needed = 0, uses_anonymous_args = 0
+ 488              	.LVL47:
+ 489 0000 00B5     		push	{lr}
+ 490              	.LCFI15:
+ 491              		.cfi_def_cfa_offset 4
+ 492              		.cfi_offset 14, -4
+ 493 0002 83B0     		sub	sp, sp, #12
+ 494              	.LCFI16:
+ 495              		.cfi_def_cfa_offset 16
+ 286:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 496              		.loc 1 286 0
+ 497 0004 064A     		ldr	r2, .L29
+ 498 0006 5388     		ldrh	r3, [r2, #2]
+ 499 0008 1288     		ldrh	r2, [r2]
+ 500 000a 013A     		subs	r2, r2, #1
+ 501 000c 80B2     		uxth	r0, r0
+ 502              	.LVL48:
+ 503 000e 0090     		str	r0, [sp]
+ 504 0010 92B2     		uxth	r2, r2
+ 505 0012 0021     		movs	r1, #0
+ 506 0014 0846     		mov	r0, r1
+ 507 0016 FFF7FEFF 		bl	TM_ILI9341_INT_Fill
+ 508              	.LVL49:
+ 287:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 509              		.loc 1 287 0
+ 510 001a 03B0     		add	sp, sp, #12
+ 511              	.LCFI17:
+ 512              		.cfi_def_cfa_offset 4
+ 513              		@ sp needed
+ARM GAS  /tmp/ccYW1LjA.s 			page 16
+
+
+ 514 001c 5DF804FB 		ldr	pc, [sp], #4
+ 515              	.L30:
+ 516              		.align	2
+ 517              	.L29:
+ 518 0020 00000000 		.word	ILI9341_Opts
+ 519              		.cfi_endproc
+ 520              	.LFE138:
+ 522              		.section	.text.TM_ILI9341_Delay,"ax",%progbits
+ 523              		.align	1
+ 524              		.global	TM_ILI9341_Delay
+ 525              		.syntax unified
+ 526              		.thumb
+ 527              		.thumb_func
+ 528              		.fpu fpv4-sp-d16
+ 530              	TM_ILI9341_Delay:
+ 531              	.LFB140:
+ 340:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 341:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_Delay(volatile unsigned int delay) {
+ 532              		.loc 1 341 0
+ 533              		.cfi_startproc
+ 534              		@ args = 0, pretend = 0, frame = 8
+ 535              		@ frame_needed = 0, uses_anonymous_args = 0
+ 536              		@ link register save eliminated.
+ 537              	.LVL50:
+ 538 0000 82B0     		sub	sp, sp, #8
+ 539              	.LCFI18:
+ 540              		.cfi_def_cfa_offset 8
+ 541 0002 0190     		str	r0, [sp, #4]
+ 342:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	for (; delay != 0; delay--); 
+ 542              		.loc 1 342 0
+ 543 0004 019B     		ldr	r3, [sp, #4]
+ 544 0006 2BB1     		cbz	r3, .L31
+ 545              	.L33:
+ 546              		.loc 1 342 0 is_stmt 0 discriminator 2
+ 547 0008 019B     		ldr	r3, [sp, #4]
+ 548 000a 013B     		subs	r3, r3, #1
+ 549 000c 0193     		str	r3, [sp, #4]
+ 550 000e 019B     		ldr	r3, [sp, #4]
+ 551 0010 002B     		cmp	r3, #0
+ 552 0012 F9D1     		bne	.L33
+ 553              	.L31:
+ 343:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 554              		.loc 1 343 0 is_stmt 1
+ 555 0014 02B0     		add	sp, sp, #8
+ 556              	.LCFI19:
+ 557              		.cfi_def_cfa_offset 0
+ 558              		@ sp needed
+ 559 0016 7047     		bx	lr
+ 560              		.cfi_endproc
+ 561              	.LFE140:
+ 563              		.section	.text.TM_ILI9341_InitLCD,"ax",%progbits
+ 564              		.align	1
+ 565              		.global	TM_ILI9341_InitLCD
+ 566              		.syntax unified
+ 567              		.thumb
+ 568              		.thumb_func
+ 569              		.fpu fpv4-sp-d16
+ARM GAS  /tmp/ccYW1LjA.s 			page 17
+
+
+ 571              	TM_ILI9341_InitLCD:
+ 572              	.LFB131:
+ 127:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Force reset */
+ 573              		.loc 1 127 0
+ 574              		.cfi_startproc
+ 575              		@ args = 0, pretend = 0, frame = 0
+ 576              		@ frame_needed = 0, uses_anonymous_args = 0
+ 577 0000 08B5     		push	{r3, lr}
+ 578              	.LCFI20:
+ 579              		.cfi_def_cfa_offset 8
+ 580              		.cfi_offset 3, -8
+ 581              		.cfi_offset 14, -4
+ 130:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_RST_SET;
+ 582              		.loc 1 130 0
+ 583 0002 44F62060 		movw	r0, #20000
+ 584 0006 FFF7FEFF 		bl	TM_ILI9341_Delay
+ 585              	.LVL51:
+ 134:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 586              		.loc 1 134 0
+ 587 000a 44F62060 		movw	r0, #20000
+ 588 000e FFF7FEFF 		bl	TM_ILI9341_Delay
+ 589              	.LVL52:
+ 137:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_Delay(50000);
+ 590              		.loc 1 137 0
+ 591 0012 0120     		movs	r0, #1
+ 592 0014 FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 593              	.LVL53:
+ 138:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 594              		.loc 1 138 0
+ 595 0018 4CF25030 		movw	r0, #50000
+ 596 001c FFF7FEFF 		bl	TM_ILI9341_Delay
+ 597              	.LVL54:
+ 140:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x39);
+ 598              		.loc 1 140 0
+ 599 0020 CB20     		movs	r0, #203
+ 600 0022 FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 601              	.LVL55:
+ 141:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x2C);
+ 602              		.loc 1 141 0
+ 603 0026 3920     		movs	r0, #57
+ 604 0028 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 605              	.LVL56:
+ 142:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 606              		.loc 1 142 0
+ 607 002c 2C20     		movs	r0, #44
+ 608 002e FFF7FEFF 		bl	TM_ILI9341_SendData
+ 609              	.LVL57:
+ 143:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x34);
+ 610              		.loc 1 143 0
+ 611 0032 0020     		movs	r0, #0
+ 612 0034 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 613              	.LVL58:
+ 144:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x02);
+ 614              		.loc 1 144 0
+ 615 0038 3420     		movs	r0, #52
+ 616 003a FFF7FEFF 		bl	TM_ILI9341_SendData
+ 617              	.LVL59:
+ARM GAS  /tmp/ccYW1LjA.s 			page 18
+
+
+ 145:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_POWERB);
+ 618              		.loc 1 145 0
+ 619 003e 0220     		movs	r0, #2
+ 620 0040 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 621              	.LVL60:
+ 146:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 622              		.loc 1 146 0
+ 623 0044 CF20     		movs	r0, #207
+ 624 0046 FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 625              	.LVL61:
+ 147:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0xC1);
+ 626              		.loc 1 147 0
+ 627 004a 0020     		movs	r0, #0
+ 628 004c FFF7FEFF 		bl	TM_ILI9341_SendData
+ 629              	.LVL62:
+ 148:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x30);
+ 630              		.loc 1 148 0
+ 631 0050 C120     		movs	r0, #193
+ 632 0052 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 633              	.LVL63:
+ 149:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_DTCA);
+ 634              		.loc 1 149 0
+ 635 0056 3020     		movs	r0, #48
+ 636 0058 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 637              	.LVL64:
+ 150:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x85);
+ 638              		.loc 1 150 0
+ 639 005c E820     		movs	r0, #232
+ 640 005e FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 641              	.LVL65:
+ 151:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 642              		.loc 1 151 0
+ 643 0062 8520     		movs	r0, #133
+ 644 0064 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 645              	.LVL66:
+ 152:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x78);
+ 646              		.loc 1 152 0
+ 647 0068 0020     		movs	r0, #0
+ 648 006a FFF7FEFF 		bl	TM_ILI9341_SendData
+ 649              	.LVL67:
+ 153:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_DTCB);
+ 650              		.loc 1 153 0
+ 651 006e 7820     		movs	r0, #120
+ 652 0070 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 653              	.LVL68:
+ 154:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 654              		.loc 1 154 0
+ 655 0074 EA20     		movs	r0, #234
+ 656 0076 FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 657              	.LVL69:
+ 155:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 658              		.loc 1 155 0
+ 659 007a 0020     		movs	r0, #0
+ 660 007c FFF7FEFF 		bl	TM_ILI9341_SendData
+ 661              	.LVL70:
+ 156:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_POWER_SEQ);
+ 662              		.loc 1 156 0
+ARM GAS  /tmp/ccYW1LjA.s 			page 19
+
+
+ 663 0080 0020     		movs	r0, #0
+ 664 0082 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 665              	.LVL71:
+ 157:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x64);
+ 666              		.loc 1 157 0
+ 667 0086 ED20     		movs	r0, #237
+ 668 0088 FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 669              	.LVL72:
+ 158:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x03);
+ 670              		.loc 1 158 0
+ 671 008c 6420     		movs	r0, #100
+ 672 008e FFF7FEFF 		bl	TM_ILI9341_SendData
+ 673              	.LVL73:
+ 159:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x12);
+ 674              		.loc 1 159 0
+ 675 0092 0320     		movs	r0, #3
+ 676 0094 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 677              	.LVL74:
+ 160:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x81);
+ 678              		.loc 1 160 0
+ 679 0098 1220     		movs	r0, #18
+ 680 009a FFF7FEFF 		bl	TM_ILI9341_SendData
+ 681              	.LVL75:
+ 161:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_PRC);
+ 682              		.loc 1 161 0
+ 683 009e 8120     		movs	r0, #129
+ 684 00a0 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 685              	.LVL76:
+ 162:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x20);
+ 686              		.loc 1 162 0
+ 687 00a4 F720     		movs	r0, #247
+ 688 00a6 FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 689              	.LVL77:
+ 163:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_POWER1);
+ 690              		.loc 1 163 0
+ 691 00aa 2020     		movs	r0, #32
+ 692 00ac FFF7FEFF 		bl	TM_ILI9341_SendData
+ 693              	.LVL78:
+ 164:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x23);
+ 694              		.loc 1 164 0
+ 695 00b0 C020     		movs	r0, #192
+ 696 00b2 FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 697              	.LVL79:
+ 165:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_POWER2);
+ 698              		.loc 1 165 0
+ 699 00b6 2320     		movs	r0, #35
+ 700 00b8 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 701              	.LVL80:
+ 166:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x10);
+ 702              		.loc 1 166 0
+ 703 00bc C120     		movs	r0, #193
+ 704 00be FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 705              	.LVL81:
+ 167:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_VCOM1);
+ 706              		.loc 1 167 0
+ 707 00c2 1020     		movs	r0, #16
+ 708 00c4 FFF7FEFF 		bl	TM_ILI9341_SendData
+ARM GAS  /tmp/ccYW1LjA.s 			page 20
+
+
+ 709              	.LVL82:
+ 168:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x3E);
+ 710              		.loc 1 168 0
+ 711 00c8 C520     		movs	r0, #197
+ 712 00ca FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 713              	.LVL83:
+ 169:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x28);
+ 714              		.loc 1 169 0
+ 715 00ce 3E20     		movs	r0, #62
+ 716 00d0 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 717              	.LVL84:
+ 170:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_VCOM2);
+ 718              		.loc 1 170 0
+ 719 00d4 2820     		movs	r0, #40
+ 720 00d6 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 721              	.LVL85:
+ 171:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x86);
+ 722              		.loc 1 171 0
+ 723 00da C720     		movs	r0, #199
+ 724 00dc FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 725              	.LVL86:
+ 172:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_MAC);
+ 726              		.loc 1 172 0
+ 727 00e0 8620     		movs	r0, #134
+ 728 00e2 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 729              	.LVL87:
+ 173:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x48);
+ 730              		.loc 1 173 0
+ 731 00e6 3620     		movs	r0, #54
+ 732 00e8 FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 733              	.LVL88:
+ 174:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_PIXEL_FORMAT);
+ 734              		.loc 1 174 0
+ 735 00ec 4820     		movs	r0, #72
+ 736 00ee FFF7FEFF 		bl	TM_ILI9341_SendData
+ 737              	.LVL89:
+ 175:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x55);
+ 738              		.loc 1 175 0
+ 739 00f2 3A20     		movs	r0, #58
+ 740 00f4 FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 741              	.LVL90:
+ 176:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_FRC);
+ 742              		.loc 1 176 0
+ 743 00f8 5520     		movs	r0, #85
+ 744 00fa FFF7FEFF 		bl	TM_ILI9341_SendData
+ 745              	.LVL91:
+ 177:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 746              		.loc 1 177 0
+ 747 00fe B120     		movs	r0, #177
+ 748 0100 FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 749              	.LVL92:
+ 178:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x18);
+ 750              		.loc 1 178 0
+ 751 0104 0020     		movs	r0, #0
+ 752 0106 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 753              	.LVL93:
+ 179:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_DFC);
+ARM GAS  /tmp/ccYW1LjA.s 			page 21
+
+
+ 754              		.loc 1 179 0
+ 755 010a 1820     		movs	r0, #24
+ 756 010c FFF7FEFF 		bl	TM_ILI9341_SendData
+ 757              	.LVL94:
+ 180:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x08);
+ 758              		.loc 1 180 0
+ 759 0110 B620     		movs	r0, #182
+ 760 0112 FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 761              	.LVL95:
+ 181:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x82);
+ 762              		.loc 1 181 0
+ 763 0116 0820     		movs	r0, #8
+ 764 0118 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 765              	.LVL96:
+ 182:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x27);
+ 766              		.loc 1 182 0
+ 767 011c 8220     		movs	r0, #130
+ 768 011e FFF7FEFF 		bl	TM_ILI9341_SendData
+ 769              	.LVL97:
+ 183:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_3GAMMA_EN);
+ 770              		.loc 1 183 0
+ 771 0122 2720     		movs	r0, #39
+ 772 0124 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 773              	.LVL98:
+ 184:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 774              		.loc 1 184 0
+ 775 0128 F220     		movs	r0, #242
+ 776 012a FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 777              	.LVL99:
+ 185:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_COLUMN_ADDR);
+ 778              		.loc 1 185 0
+ 779 012e 0020     		movs	r0, #0
+ 780 0130 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 781              	.LVL100:
+ 186:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 782              		.loc 1 186 0
+ 783 0134 2A20     		movs	r0, #42
+ 784 0136 FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 785              	.LVL101:
+ 187:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 786              		.loc 1 187 0
+ 787 013a 0020     		movs	r0, #0
+ 788 013c FFF7FEFF 		bl	TM_ILI9341_SendData
+ 789              	.LVL102:
+ 188:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 790              		.loc 1 188 0
+ 791 0140 0020     		movs	r0, #0
+ 792 0142 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 793              	.LVL103:
+ 189:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0xEF);
+ 794              		.loc 1 189 0
+ 795 0146 0020     		movs	r0, #0
+ 796 0148 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 797              	.LVL104:
+ 190:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_PAGE_ADDR);
+ 798              		.loc 1 190 0
+ 799 014c EF20     		movs	r0, #239
+ARM GAS  /tmp/ccYW1LjA.s 			page 22
+
+
+ 800 014e FFF7FEFF 		bl	TM_ILI9341_SendData
+ 801              	.LVL105:
+ 191:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 802              		.loc 1 191 0
+ 803 0152 2B20     		movs	r0, #43
+ 804 0154 FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 805              	.LVL106:
+ 192:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 806              		.loc 1 192 0
+ 807 0158 0020     		movs	r0, #0
+ 808 015a FFF7FEFF 		bl	TM_ILI9341_SendData
+ 809              	.LVL107:
+ 193:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x01);
+ 810              		.loc 1 193 0
+ 811 015e 0020     		movs	r0, #0
+ 812 0160 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 813              	.LVL108:
+ 194:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x3F);
+ 814              		.loc 1 194 0
+ 815 0164 0120     		movs	r0, #1
+ 816 0166 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 817              	.LVL109:
+ 195:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_GAMMA);
+ 818              		.loc 1 195 0
+ 819 016a 3F20     		movs	r0, #63
+ 820 016c FFF7FEFF 		bl	TM_ILI9341_SendData
+ 821              	.LVL110:
+ 196:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x01);
+ 822              		.loc 1 196 0
+ 823 0170 2620     		movs	r0, #38
+ 824 0172 FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 825              	.LVL111:
+ 197:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_PGAMMA);
+ 826              		.loc 1 197 0
+ 827 0176 0120     		movs	r0, #1
+ 828 0178 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 829              	.LVL112:
+ 198:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x0F);
+ 830              		.loc 1 198 0
+ 831 017c E020     		movs	r0, #224
+ 832 017e FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 833              	.LVL113:
+ 199:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x31);
+ 834              		.loc 1 199 0
+ 835 0182 0F20     		movs	r0, #15
+ 836 0184 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 837              	.LVL114:
+ 200:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x2B);
+ 838              		.loc 1 200 0
+ 839 0188 3120     		movs	r0, #49
+ 840 018a FFF7FEFF 		bl	TM_ILI9341_SendData
+ 841              	.LVL115:
+ 201:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x0C);
+ 842              		.loc 1 201 0
+ 843 018e 2B20     		movs	r0, #43
+ 844 0190 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 845              	.LVL116:
+ARM GAS  /tmp/ccYW1LjA.s 			page 23
+
+
+ 202:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x0E);
+ 846              		.loc 1 202 0
+ 847 0194 0C20     		movs	r0, #12
+ 848 0196 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 849              	.LVL117:
+ 203:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x08);
+ 850              		.loc 1 203 0
+ 851 019a 0E20     		movs	r0, #14
+ 852 019c FFF7FEFF 		bl	TM_ILI9341_SendData
+ 853              	.LVL118:
+ 204:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x4E);
+ 854              		.loc 1 204 0
+ 855 01a0 0820     		movs	r0, #8
+ 856 01a2 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 857              	.LVL119:
+ 205:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0xF1);
+ 858              		.loc 1 205 0
+ 859 01a6 4E20     		movs	r0, #78
+ 860 01a8 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 861              	.LVL120:
+ 206:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x37);
+ 862              		.loc 1 206 0
+ 863 01ac F120     		movs	r0, #241
+ 864 01ae FFF7FEFF 		bl	TM_ILI9341_SendData
+ 865              	.LVL121:
+ 207:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x07);
+ 866              		.loc 1 207 0
+ 867 01b2 3720     		movs	r0, #55
+ 868 01b4 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 869              	.LVL122:
+ 208:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x10);
+ 870              		.loc 1 208 0
+ 871 01b8 0720     		movs	r0, #7
+ 872 01ba FFF7FEFF 		bl	TM_ILI9341_SendData
+ 873              	.LVL123:
+ 209:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x03);
+ 874              		.loc 1 209 0
+ 875 01be 1020     		movs	r0, #16
+ 876 01c0 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 877              	.LVL124:
+ 210:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x0E);
+ 878              		.loc 1 210 0
+ 879 01c4 0320     		movs	r0, #3
+ 880 01c6 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 881              	.LVL125:
+ 211:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x09);
+ 882              		.loc 1 211 0
+ 883 01ca 0E20     		movs	r0, #14
+ 884 01cc FFF7FEFF 		bl	TM_ILI9341_SendData
+ 885              	.LVL126:
+ 212:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 886              		.loc 1 212 0
+ 887 01d0 0920     		movs	r0, #9
+ 888 01d2 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 889              	.LVL127:
+ 213:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_NGAMMA);
+ 890              		.loc 1 213 0
+ARM GAS  /tmp/ccYW1LjA.s 			page 24
+
+
+ 891 01d6 0020     		movs	r0, #0
+ 892 01d8 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 893              	.LVL128:
+ 214:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x00);
+ 894              		.loc 1 214 0
+ 895 01dc E120     		movs	r0, #225
+ 896 01de FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 897              	.LVL129:
+ 215:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x0E);
+ 898              		.loc 1 215 0
+ 899 01e2 0020     		movs	r0, #0
+ 900 01e4 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 901              	.LVL130:
+ 216:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x14);
+ 902              		.loc 1 216 0
+ 903 01e8 0E20     		movs	r0, #14
+ 904 01ea FFF7FEFF 		bl	TM_ILI9341_SendData
+ 905              	.LVL131:
+ 217:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x03);
+ 906              		.loc 1 217 0
+ 907 01ee 1420     		movs	r0, #20
+ 908 01f0 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 909              	.LVL132:
+ 218:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x11);
+ 910              		.loc 1 218 0
+ 911 01f4 0320     		movs	r0, #3
+ 912 01f6 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 913              	.LVL133:
+ 219:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x07);
+ 914              		.loc 1 219 0
+ 915 01fa 1120     		movs	r0, #17
+ 916 01fc FFF7FEFF 		bl	TM_ILI9341_SendData
+ 917              	.LVL134:
+ 220:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x31);
+ 918              		.loc 1 220 0
+ 919 0200 0720     		movs	r0, #7
+ 920 0202 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 921              	.LVL135:
+ 221:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0xC1);
+ 922              		.loc 1 221 0
+ 923 0206 3120     		movs	r0, #49
+ 924 0208 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 925              	.LVL136:
+ 222:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x48);
+ 926              		.loc 1 222 0
+ 927 020c C120     		movs	r0, #193
+ 928 020e FFF7FEFF 		bl	TM_ILI9341_SendData
+ 929              	.LVL137:
+ 223:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x08);
+ 930              		.loc 1 223 0
+ 931 0212 4820     		movs	r0, #72
+ 932 0214 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 933              	.LVL138:
+ 224:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x0F);
+ 934              		.loc 1 224 0
+ 935 0218 0820     		movs	r0, #8
+ 936 021a FFF7FEFF 		bl	TM_ILI9341_SendData
+ARM GAS  /tmp/ccYW1LjA.s 			page 25
+
+
+ 937              	.LVL139:
+ 225:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x0C);
+ 938              		.loc 1 225 0
+ 939 021e 0F20     		movs	r0, #15
+ 940 0220 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 941              	.LVL140:
+ 226:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x31);
+ 942              		.loc 1 226 0
+ 943 0224 0C20     		movs	r0, #12
+ 944 0226 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 945              	.LVL141:
+ 227:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x36);
+ 946              		.loc 1 227 0
+ 947 022a 3120     		movs	r0, #49
+ 948 022c FFF7FEFF 		bl	TM_ILI9341_SendData
+ 949              	.LVL142:
+ 228:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendData(0x0F);
+ 950              		.loc 1 228 0
+ 951 0230 3620     		movs	r0, #54
+ 952 0232 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 953              	.LVL143:
+ 229:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_SLEEP_OUT);
+ 954              		.loc 1 229 0
+ 955 0236 0F20     		movs	r0, #15
+ 956 0238 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 957              	.LVL144:
+ 230:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 958              		.loc 1 230 0
+ 959 023c 1120     		movs	r0, #17
+ 960 023e FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 961              	.LVL145:
+ 232:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 962              		.loc 1 232 0
+ 963 0242 0548     		ldr	r0, .L38
+ 964 0244 FFF7FEFF 		bl	TM_ILI9341_Delay
+ 965              	.LVL146:
+ 234:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_GRAM);
+ 966              		.loc 1 234 0
+ 967 0248 2920     		movs	r0, #41
+ 968 024a FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 969              	.LVL147:
+ 235:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 970              		.loc 1 235 0
+ 971 024e 2C20     		movs	r0, #44
+ 972 0250 FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 973              	.LVL148:
+ 236:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 974              		.loc 1 236 0
+ 975 0254 08BD     		pop	{r3, pc}
+ 976              	.L39:
+ 977 0256 00BF     		.align	2
+ 978              	.L38:
+ 979 0258 40420F00 		.word	1000000
+ 980              		.cfi_endproc
+ 981              	.LFE131:
+ 983              		.section	.text.TM_ILI9341_Init,"ax",%progbits
+ 984              		.align	1
+ARM GAS  /tmp/ccYW1LjA.s 			page 26
+
+
+ 985              		.global	TM_ILI9341_Init
+ 986              		.syntax unified
+ 987              		.thumb
+ 988              		.thumb_func
+ 989              		.fpu fpv4-sp-d16
+ 991              	TM_ILI9341_Init:
+ 992              	.LFB130:
+  95:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 993              		.loc 1 95 0
+ 994              		.cfi_startproc
+ 995              		@ args = 0, pretend = 0, frame = 24
+ 996              		@ frame_needed = 0, uses_anonymous_args = 0
+ 997              	.LVL149:
+ 998 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 999              	.LCFI21:
+ 1000              		.cfi_def_cfa_offset 20
+ 1001              		.cfi_offset 4, -20
+ 1002              		.cfi_offset 5, -16
+ 1003              		.cfi_offset 6, -12
+ 1004              		.cfi_offset 7, -8
+ 1005              		.cfi_offset 14, -4
+ 1006 0002 87B0     		sub	sp, sp, #28
+ 1007              	.LCFI22:
+ 1008              		.cfi_def_cfa_offset 48
+  97:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 1009              		.loc 1 97 0
+ 1010 0004 164B     		ldr	r3, .L42
+ 1011 0006 1860     		str	r0, [r3]
+  99:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/*Configure GPIO pin : ILI9341_CS_PIN */
+ 1012              		.loc 1 99 0
+ 1013 0008 0024     		movs	r4, #0
+ 1014 000a 0394     		str	r4, [sp, #12]
+ 1015 000c 0494     		str	r4, [sp, #16]
+ 1016 000e 0594     		str	r4, [sp, #20]
+ 101:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	LCD_GPIO_Init.Mode = GPIO_MODE_OUTPUT_PP;
+ 1017              		.loc 1 101 0
+ 1018 0010 8027     		movs	r7, #128
+ 1019 0012 0197     		str	r7, [sp, #4]
+ 102:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	LCD_GPIO_Init.Pull = GPIO_NOPULL;
+ 1020              		.loc 1 102 0
+ 1021 0014 0125     		movs	r5, #1
+ 1022 0016 0295     		str	r5, [sp, #8]
+ 104:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 1023              		.loc 1 104 0
+ 1024 0018 124E     		ldr	r6, .L42+4
+ 1025 001a 01A9     		add	r1, sp, #4
+ 1026 001c 3046     		mov	r0, r6
+ 1027              	.LVL150:
+ 1028 001e FFF7FEFF 		bl	HAL_GPIO_Init
+ 1029              	.LVL151:
+ 107:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 1030              		.loc 1 107 0
+ 1031 0022 4023     		movs	r3, #64
+ 1032 0024 0193     		str	r3, [sp, #4]
+ 109:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 1033              		.loc 1 109 0
+ 1034 0026 01A9     		add	r1, sp, #4
+ARM GAS  /tmp/ccYW1LjA.s 			page 27
+
+
+ 1035 0028 0F48     		ldr	r0, .L42+8
+ 1036 002a FFF7FEFF 		bl	HAL_GPIO_Init
+ 1037              	.LVL152:
+ 112:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 1038              		.loc 1 112 0
+ 1039 002e 2A46     		mov	r2, r5
+ 1040 0030 3946     		mov	r1, r7
+ 1041 0032 3046     		mov	r0, r6
+ 1042 0034 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1043              	.LVL153:
+ 115:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 1044              		.loc 1 115 0
+ 1045 0038 FFF7FEFF 		bl	TM_ILI9341_InitLCD
+ 1046              	.LVL154:
+ 118:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_Opts.width = ILI9341_WIDTH;
+ 1047              		.loc 1 118 0
+ 1048 003c 0B4B     		ldr	r3, .L42+12
+ 1049 003e 1C80     		strh	r4, [r3]	@ movhi
+ 1050 0040 0B4B     		ldr	r3, .L42+16
+ 1051 0042 1C80     		strh	r4, [r3]	@ movhi
+ 119:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_Opts.height = ILI9341_HEIGHT;
+ 1052              		.loc 1 119 0
+ 1053 0044 0B4B     		ldr	r3, .L42+20
+ 1054 0046 F022     		movs	r2, #240
+ 1055 0048 1A80     		strh	r2, [r3]	@ movhi
+ 120:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_Opts.orientation = TM_ILI9341_Portrait;
+ 1056              		.loc 1 120 0
+ 1057 004a 4FF4A072 		mov	r2, #320
+ 1058 004e 5A80     		strh	r2, [r3, #2]	@ movhi
+ 121:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 1059              		.loc 1 121 0
+ 1060 0050 1D71     		strb	r5, [r3, #4]
+ 124:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 1061              		.loc 1 124 0
+ 1062 0052 4FF6FF70 		movw	r0, #65535
+ 1063 0056 FFF7FEFF 		bl	TM_ILI9341_Fill
+ 1064              	.LVL155:
+ 125:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 1065              		.loc 1 125 0
+ 1066 005a 07B0     		add	sp, sp, #28
+ 1067              	.LCFI23:
+ 1068              		.cfi_def_cfa_offset 20
+ 1069              		@ sp needed
+ 1070 005c F0BD     		pop	{r4, r5, r6, r7, pc}
+ 1071              	.L43:
+ 1072 005e 00BF     		.align	2
+ 1073              	.L42:
+ 1074 0060 00000000 		.word	lcdSPI
+ 1075 0064 00080240 		.word	1073874944
+ 1076 0068 00040240 		.word	1073873920
+ 1077 006c 00000000 		.word	ILI9341_y
+ 1078 0070 00000000 		.word	ILI9341_x
+ 1079 0074 00000000 		.word	ILI9341_Opts
+ 1080              		.cfi_endproc
+ 1081              	.LFE130:
+ 1083              		.section	.text.TM_ILI9341_Rotate,"ax",%progbits
+ 1084              		.align	1
+ARM GAS  /tmp/ccYW1LjA.s 			page 28
+
+
+ 1085              		.global	TM_ILI9341_Rotate
+ 1086              		.syntax unified
+ 1087              		.thumb
+ 1088              		.thumb_func
+ 1089              		.fpu fpv4-sp-d16
+ 1091              	TM_ILI9341_Rotate:
+ 1092              	.LFB141:
+ 344:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 345:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_Rotate(TM_ILI9341_Orientation_t orientation) {
+ 1093              		.loc 1 345 0
+ 1094              		.cfi_startproc
+ 1095              		@ args = 0, pretend = 0, frame = 0
+ 1096              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1097              	.LVL156:
+ 1098 0000 10B5     		push	{r4, lr}
+ 1099              	.LCFI24:
+ 1100              		.cfi_def_cfa_offset 8
+ 1101              		.cfi_offset 4, -8
+ 1102              		.cfi_offset 14, -4
+ 1103 0002 0446     		mov	r4, r0
+ 346:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_SendCommand(ILI9341_MAC);
+ 1104              		.loc 1 346 0
+ 1105 0004 3620     		movs	r0, #54
+ 1106              	.LVL157:
+ 1107 0006 FFF7FEFF 		bl	TM_ILI9341_SendCommand
+ 1108              	.LVL158:
+ 347:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	if (orientation == TM_ILI9341_Orientation_Portrait_1) {
+ 1109              		.loc 1 347 0
+ 1110 000a 84B1     		cbz	r4, .L55
+ 348:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		TM_ILI9341_SendData(0x58);
+ 349:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	} else if (orientation == TM_ILI9341_Orientation_Portrait_2) {
+ 1111              		.loc 1 349 0
+ 1112 000c 012C     		cmp	r4, #1
+ 1113 000e 1AD0     		beq	.L56
+ 350:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		TM_ILI9341_SendData(0x88);
+ 351:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	} else if (orientation == TM_ILI9341_Orientation_Landscape_1) {
+ 1114              		.loc 1 351 0
+ 1115 0010 022C     		cmp	r4, #2
+ 1116 0012 1CD0     		beq	.L57
+ 352:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		TM_ILI9341_SendData(0x28);
+ 353:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	} else if (orientation == TM_ILI9341_Orientation_Landscape_2) {
+ 1117              		.loc 1 353 0
+ 1118 0014 032C     		cmp	r4, #3
+ 1119 0016 1ED0     		beq	.L58
+ 354:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		TM_ILI9341_SendData(0xE8);
+ 355:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 356:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 357:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	if (orientation == TM_ILI9341_Orientation_Portrait_1 || orientation == TM_ILI9341_Orientation_Port
+ 1120              		.loc 1 357 0
+ 1121 0018 012C     		cmp	r4, #1
+ 1122 001a 0BD9     		bls	.L53
+ 1123              	.L51:
+ 358:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		ILI9341_Opts.width = ILI9341_WIDTH;
+ 359:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		ILI9341_Opts.height = ILI9341_HEIGHT;
+ 360:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		ILI9341_Opts.orientation = TM_ILI9341_Portrait;
+ 361:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	} else {
+ 362:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		ILI9341_Opts.width = ILI9341_HEIGHT;
+ARM GAS  /tmp/ccYW1LjA.s 			page 29
+
+
+ 1124              		.loc 1 362 0
+ 1125 001c 104B     		ldr	r3, .L59
+ 1126 001e 4FF4A072 		mov	r2, #320
+ 1127 0022 1A80     		strh	r2, [r3]	@ movhi
+ 363:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		ILI9341_Opts.height = ILI9341_WIDTH;
+ 1128              		.loc 1 363 0
+ 1129 0024 F022     		movs	r2, #240
+ 1130 0026 5A80     		strh	r2, [r3, #2]	@ movhi
+ 364:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		ILI9341_Opts.orientation = TM_ILI9341_Landscape;
+ 1131              		.loc 1 364 0
+ 1132 0028 0022     		movs	r2, #0
+ 1133 002a 1A71     		strb	r2, [r3, #4]
+ 1134              	.L44:
+ 365:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 366:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 1135              		.loc 1 366 0
+ 1136 002c 10BD     		pop	{r4, pc}
+ 1137              	.L55:
+ 348:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	} else if (orientation == TM_ILI9341_Orientation_Portrait_2) {
+ 1138              		.loc 1 348 0
+ 1139 002e 5820     		movs	r0, #88
+ 1140 0030 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 1141              	.LVL159:
+ 1142              	.L53:
+ 358:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		ILI9341_Opts.height = ILI9341_HEIGHT;
+ 1143              		.loc 1 358 0
+ 1144 0034 0A4B     		ldr	r3, .L59
+ 1145 0036 F022     		movs	r2, #240
+ 1146 0038 1A80     		strh	r2, [r3]	@ movhi
+ 359:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		ILI9341_Opts.orientation = TM_ILI9341_Portrait;
+ 1147              		.loc 1 359 0
+ 1148 003a 4FF4A072 		mov	r2, #320
+ 1149 003e 5A80     		strh	r2, [r3, #2]	@ movhi
+ 360:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	} else {
+ 1150              		.loc 1 360 0
+ 1151 0040 0122     		movs	r2, #1
+ 1152 0042 1A71     		strb	r2, [r3, #4]
+ 1153 0044 F2E7     		b	.L44
+ 1154              	.L56:
+ 350:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	} else if (orientation == TM_ILI9341_Orientation_Landscape_1) {
+ 1155              		.loc 1 350 0
+ 1156 0046 8820     		movs	r0, #136
+ 1157 0048 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 1158              	.LVL160:
+ 1159 004c F2E7     		b	.L53
+ 1160              	.L57:
+ 352:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	} else if (orientation == TM_ILI9341_Orientation_Landscape_2) {
+ 1161              		.loc 1 352 0
+ 1162 004e 2820     		movs	r0, #40
+ 1163 0050 FFF7FEFF 		bl	TM_ILI9341_SendData
+ 1164              	.LVL161:
+ 1165 0054 E2E7     		b	.L51
+ 1166              	.L58:
+ 354:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 1167              		.loc 1 354 0
+ 1168 0056 E820     		movs	r0, #232
+ 1169 0058 FFF7FEFF 		bl	TM_ILI9341_SendData
+ARM GAS  /tmp/ccYW1LjA.s 			page 30
+
+
+ 1170              	.LVL162:
+ 1171 005c DEE7     		b	.L51
+ 1172              	.L60:
+ 1173 005e 00BF     		.align	2
+ 1174              	.L59:
+ 1175 0060 00000000 		.word	ILI9341_Opts
+ 1176              		.cfi_endproc
+ 1177              	.LFE141:
+ 1179              		.section	.text.TM_ILI9341_GetStringSize,"ax",%progbits
+ 1180              		.align	1
+ 1181              		.global	TM_ILI9341_GetStringSize
+ 1182              		.syntax unified
+ 1183              		.thumb
+ 1184              		.thumb_func
+ 1185              		.fpu fpv4-sp-d16
+ 1187              	TM_ILI9341_GetStringSize:
+ 1188              	.LFB143:
+ 367:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 368:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_Puts(uint16_t x, uint16_t y, char *str, TM_FontDef_t *font, uint32_t foreground, ui
+ 369:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	uint16_t startX = x;
+ 370:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 371:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Set X and Y coordinates */
+ 372:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_x = x;
+ 373:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_y = y;
+ 374:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 375:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	while (*str) {
+ 376:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		/* New line */
+ 377:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		if (*str == '\n') {
+ 378:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			ILI9341_y += font->FontHeight + 1;
+ 379:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			/* if after \n is also \r, than go to the left of the screen */
+ 380:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			if (*(str + 1) == '\r') {
+ 381:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 				ILI9341_x = 0;
+ 382:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 				str++;
+ 383:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			} else {
+ 384:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 				ILI9341_x = startX;
+ 385:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			}
+ 386:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			str++;
+ 387:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			continue;
+ 388:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		} else if (*str == '\r') {
+ 389:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			str++;
+ 390:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			continue;
+ 391:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		}
+ 392:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		
+ 393:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		/* Put character to LCD */
+ 394:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		TM_ILI9341_Putc(ILI9341_x, ILI9341_y, *str++, font, foreground, background);
+ 395:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 396:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 397:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 398:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_GetStringSize(char *str, TM_FontDef_t *font, uint16_t *width, uint16_t *height) {
+ 1189              		.loc 1 398 0
+ 1190              		.cfi_startproc
+ 1191              		@ args = 0, pretend = 0, frame = 0
+ 1192              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1193              		@ link register save eliminated.
+ 1194              	.LVL163:
+ 1195 0000 10B4     		push	{r4}
+ 1196              	.LCFI25:
+ARM GAS  /tmp/ccYW1LjA.s 			page 31
+
+
+ 1197              		.cfi_def_cfa_offset 4
+ 1198              		.cfi_offset 4, -4
+ 1199              	.LVL164:
+ 399:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	uint16_t w = 0;
+ 400:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	*height = font->FontHeight;
+ 1200              		.loc 1 400 0
+ 1201 0002 4C78     		ldrb	r4, [r1, #1]	@ zero_extendqisi2
+ 1202 0004 1C80     		strh	r4, [r3]	@ movhi
+ 1203              	.LVL165:
+ 401:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	while (*str++) {
+ 1204              		.loc 1 401 0
+ 1205 0006 0378     		ldrb	r3, [r0]	@ zero_extendqisi2
+ 1206              	.LVL166:
+ 1207 0008 63B1     		cbz	r3, .L64
+ 1208 000a 441C     		adds	r4, r0, #1
+ 1209              	.LVL167:
+ 402:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		w += font->FontWidth;
+ 1210              		.loc 1 402 0
+ 1211 000c 0878     		ldrb	r0, [r1]	@ zero_extendqisi2
+ 399:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	uint16_t w = 0;
+ 1212              		.loc 1 399 0
+ 1213 000e 0023     		movs	r3, #0
+ 1214              	.LVL168:
+ 1215              	.L63:
+ 1216              		.loc 1 402 0
+ 1217 0010 0344     		add	r3, r3, r0
+ 1218              	.LVL169:
+ 1219 0012 9BB2     		uxth	r3, r3
+ 1220              	.LVL170:
+ 401:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	while (*str++) {
+ 1221              		.loc 1 401 0
+ 1222 0014 14F8011B 		ldrb	r1, [r4], #1	@ zero_extendqisi2
+ 1223              	.LVL171:
+ 1224 0018 0029     		cmp	r1, #0
+ 1225 001a F9D1     		bne	.L63
+ 1226              	.LVL172:
+ 1227              	.L62:
+ 403:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 404:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	*width = w;
+ 1228              		.loc 1 404 0
+ 1229 001c 1380     		strh	r3, [r2]	@ movhi
+ 405:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 1230              		.loc 1 405 0
+ 1231 001e 5DF8044B 		ldr	r4, [sp], #4
+ 1232              	.LCFI26:
+ 1233              		.cfi_remember_state
+ 1234              		.cfi_restore 4
+ 1235              		.cfi_def_cfa_offset 0
+ 1236 0022 7047     		bx	lr
+ 1237              	.LVL173:
+ 1238              	.L64:
+ 1239              	.LCFI27:
+ 1240              		.cfi_restore_state
+ 399:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	*height = font->FontHeight;
+ 1241              		.loc 1 399 0
+ 1242 0024 0023     		movs	r3, #0
+ 1243 0026 F9E7     		b	.L62
+ARM GAS  /tmp/ccYW1LjA.s 			page 32
+
+
+ 1244              		.cfi_endproc
+ 1245              	.LFE143:
+ 1247              		.section	.text.TM_ILI9341_Putc,"ax",%progbits
+ 1248              		.align	1
+ 1249              		.global	TM_ILI9341_Putc
+ 1250              		.syntax unified
+ 1251              		.thumb
+ 1252              		.thumb_func
+ 1253              		.fpu fpv4-sp-d16
+ 1255              	TM_ILI9341_Putc:
+ 1256              	.LFB144:
+ 406:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 407:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_Putc(uint16_t x, uint16_t y, char c, TM_FontDef_t *font, uint32_t foreground, uint3
+ 1257              		.loc 1 407 0
+ 1258              		.cfi_startproc
+ 1259              		@ args = 8, pretend = 0, frame = 0
+ 1260              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1261              	.LVL174:
+ 1262 0000 2DE9F04D 		push	{r4, r5, r6, r7, r8, r10, fp, lr}
+ 1263              	.LCFI28:
+ 1264              		.cfi_def_cfa_offset 32
+ 1265              		.cfi_offset 4, -32
+ 1266              		.cfi_offset 5, -28
+ 1267              		.cfi_offset 6, -24
+ 1268              		.cfi_offset 7, -20
+ 1269              		.cfi_offset 8, -16
+ 1270              		.cfi_offset 10, -12
+ 1271              		.cfi_offset 11, -8
+ 1272              		.cfi_offset 14, -4
+ 1273 0004 82B0     		sub	sp, sp, #8
+ 1274              	.LCFI29:
+ 1275              		.cfi_def_cfa_offset 40
+ 1276 0006 9346     		mov	fp, r2
+ 1277 0008 1D46     		mov	r5, r3
+ 408:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	uint32_t i, b, j;
+ 409:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Set coordinates */
+ 410:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_x = x;
+ 1278              		.loc 1 410 0
+ 1279 000a 2A4B     		ldr	r3, .L77
+ 1280              	.LVL175:
+ 1281 000c 1880     		strh	r0, [r3]	@ movhi
+ 411:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_y = y;
+ 1282              		.loc 1 411 0
+ 1283 000e 2A4B     		ldr	r3, .L77+4
+ 1284 0010 1980     		strh	r1, [r3]	@ movhi
+ 412:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 413:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	if ((ILI9341_x + font->FontWidth) > ILI9341_Opts.width) {
+ 1285              		.loc 1 413 0
+ 1286 0012 2B78     		ldrb	r3, [r5]	@ zero_extendqisi2
+ 1287 0014 1844     		add	r0, r0, r3
+ 1288              	.LVL176:
+ 1289 0016 294B     		ldr	r3, .L77+8
+ 1290 0018 1B88     		ldrh	r3, [r3]
+ 1291 001a 9842     		cmp	r0, r3
+ 1292 001c 06DD     		ble	.L68
+ 414:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		/* If at the end of a line of display, go to new line and set x to 0 position */
+ 415:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		ILI9341_y += font->FontHeight;
+ARM GAS  /tmp/ccYW1LjA.s 			page 33
+
+
+ 1293              		.loc 1 415 0
+ 1294 001e 6B78     		ldrb	r3, [r5, #1]	@ zero_extendqisi2
+ 1295 0020 1944     		add	r1, r1, r3
+ 1296              	.LVL177:
+ 1297 0022 254B     		ldr	r3, .L77+4
+ 1298 0024 1980     		strh	r1, [r3]	@ movhi
+ 1299              	.LVL178:
+ 416:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		ILI9341_x = 0;
+ 1300              		.loc 1 416 0
+ 1301 0026 234B     		ldr	r3, .L77
+ 1302 0028 0022     		movs	r2, #0
+ 1303              	.LVL179:
+ 1304 002a 1A80     		strh	r2, [r3]	@ movhi
+ 1305              	.LVL180:
+ 1306              	.L68:
+ 417:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 418:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 419:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Draw rectangle for background */
+ 420:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_INT_Fill(ILI9341_x, ILI9341_y, ILI9341_x + font->FontWidth, ILI9341_y + font->FontHeigh
+ 1307              		.loc 1 420 0
+ 1308 002c 214B     		ldr	r3, .L77
+ 1309 002e 1888     		ldrh	r0, [r3]
+ 1310 0030 214B     		ldr	r3, .L77+4
+ 1311 0032 1988     		ldrh	r1, [r3]
+ 1312 0034 6B78     		ldrb	r3, [r5, #1]	@ zero_extendqisi2
+ 1313 0036 0B44     		add	r3, r3, r1
+ 1314 0038 2A78     		ldrb	r2, [r5]	@ zero_extendqisi2
+ 1315 003a 0244     		add	r2, r2, r0
+ 1316 003c BDF82C40 		ldrh	r4, [sp, #44]
+ 1317 0040 0094     		str	r4, [sp]
+ 1318 0042 9BB2     		uxth	r3, r3
+ 1319 0044 92B2     		uxth	r2, r2
+ 1320 0046 FFF7FEFF 		bl	TM_ILI9341_INT_Fill
+ 1321              	.LVL181:
+ 421:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 422:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Draw font data */
+ 423:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	for (i = 0; i < font->FontHeight; i++) {
+ 1322              		.loc 1 423 0
+ 1323 004a 6A78     		ldrb	r2, [r5, #1]	@ zero_extendqisi2
+ 1324 004c 52B3     		cbz	r2, .L69
+ 1325 004e 4FF00008 		mov	r8, #0
+ 424:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		b = font->data[(c - 32) * font->FontHeight + i];
+ 425:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		for (j = 0; j < font->FontWidth; j++) {
+ 426:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			if ((b << j) & 0x8000) {
+ 427:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 				TM_ILI9341_DrawPixel(ILI9341_x + j, (ILI9341_y + i), foreground);
+ 1326              		.loc 1 427 0
+ 1327 0052 DFF864A0 		ldr	r10, .L77+4
+ 1328 0056 174F     		ldr	r7, .L77
+ 1329 0058 18E0     		b	.L73
+ 1330              	.LVL182:
+ 1331              	.L71:
+ 425:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			if ((b << j) & 0x8000) {
+ 1332              		.loc 1 425 0 discriminator 2
+ 1333 005a 0134     		adds	r4, r4, #1
+ 1334              	.LVL183:
+ 1335 005c 2B78     		ldrb	r3, [r5]	@ zero_extendqisi2
+ 1336 005e A342     		cmp	r3, r4
+ARM GAS  /tmp/ccYW1LjA.s 			page 34
+
+
+ 1337 0060 0FD9     		bls	.L70
+ 1338              	.LVL184:
+ 1339              	.L72:
+ 426:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 				TM_ILI9341_DrawPixel(ILI9341_x + j, (ILI9341_y + i), foreground);
+ 1340              		.loc 1 426 0
+ 1341 0062 06FA04F3 		lsl	r3, r6, r4
+ 1342 0066 13F4004F 		tst	r3, #32768
+ 1343 006a F6D0     		beq	.L71
+ 1344              		.loc 1 427 0
+ 1345 006c BAF80010 		ldrh	r1, [r10]
+ 1346 0070 4144     		add	r1, r1, r8
+ 1347 0072 3888     		ldrh	r0, [r7]
+ 1348 0074 2044     		add	r0, r0, r4
+ 1349 0076 0A9A     		ldr	r2, [sp, #40]
+ 1350 0078 89B2     		uxth	r1, r1
+ 1351 007a 80B2     		uxth	r0, r0
+ 1352 007c FFF7FEFF 		bl	TM_ILI9341_DrawPixel
+ 1353              	.LVL185:
+ 1354 0080 EBE7     		b	.L71
+ 1355              	.LVL186:
+ 1356              	.L70:
+ 423:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		b = font->data[(c - 32) * font->FontHeight + i];
+ 1357              		.loc 1 423 0 discriminator 2
+ 1358 0082 08F10108 		add	r8, r8, #1
+ 1359              	.LVL187:
+ 1360 0086 6A78     		ldrb	r2, [r5, #1]	@ zero_extendqisi2
+ 1361 0088 4245     		cmp	r2, r8
+ 1362 008a 0BD9     		bls	.L69
+ 1363              	.LVL188:
+ 1364              	.L73:
+ 424:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		for (j = 0; j < font->FontWidth; j++) {
+ 1365              		.loc 1 424 0
+ 1366 008c ABF12003 		sub	r3, fp, #32
+ 1367 0090 02FB0383 		mla	r3, r2, r3, r8
+ 1368 0094 6A68     		ldr	r2, [r5, #4]
+ 1369 0096 32F81360 		ldrh	r6, [r2, r3, lsl #1]
+ 1370              	.LVL189:
+ 425:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			if ((b << j) & 0x8000) {
+ 1371              		.loc 1 425 0
+ 1372 009a 2B78     		ldrb	r3, [r5]	@ zero_extendqisi2
+ 1373 009c 002B     		cmp	r3, #0
+ 1374 009e F0D0     		beq	.L70
+ 1375 00a0 0024     		movs	r4, #0
+ 1376 00a2 DEE7     		b	.L72
+ 1377              	.LVL190:
+ 1378              	.L69:
+ 428:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			}
+ 429:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		}
+ 430:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 431:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 432:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Set new pointer */
+ 433:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_x += font->FontWidth;
+ 1379              		.loc 1 433 0
+ 1380 00a4 034A     		ldr	r2, .L77
+ 1381 00a6 2B78     		ldrb	r3, [r5]	@ zero_extendqisi2
+ 1382 00a8 1188     		ldrh	r1, [r2]
+ 1383 00aa 0B44     		add	r3, r3, r1
+ARM GAS  /tmp/ccYW1LjA.s 			page 35
+
+
+ 1384 00ac 1380     		strh	r3, [r2]	@ movhi
+ 434:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 1385              		.loc 1 434 0
+ 1386 00ae 02B0     		add	sp, sp, #8
+ 1387              	.LCFI30:
+ 1388              		.cfi_def_cfa_offset 32
+ 1389              		@ sp needed
+ 1390 00b0 BDE8F08D 		pop	{r4, r5, r6, r7, r8, r10, fp, pc}
+ 1391              	.LVL191:
+ 1392              	.L78:
+ 1393              		.align	2
+ 1394              	.L77:
+ 1395 00b4 00000000 		.word	ILI9341_x
+ 1396 00b8 00000000 		.word	ILI9341_y
+ 1397 00bc 00000000 		.word	ILI9341_Opts
+ 1398              		.cfi_endproc
+ 1399              	.LFE144:
+ 1401              		.section	.text.TM_ILI9341_Puts,"ax",%progbits
+ 1402              		.align	1
+ 1403              		.global	TM_ILI9341_Puts
+ 1404              		.syntax unified
+ 1405              		.thumb
+ 1406              		.thumb_func
+ 1407              		.fpu fpv4-sp-d16
+ 1409              	TM_ILI9341_Puts:
+ 1410              	.LFB142:
+ 368:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	uint16_t startX = x;
+ 1411              		.loc 1 368 0
+ 1412              		.cfi_startproc
+ 1413              		@ args = 8, pretend = 0, frame = 0
+ 1414              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1415              	.LVL192:
+ 1416 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 1417              	.LCFI31:
+ 1418              		.cfi_def_cfa_offset 36
+ 1419              		.cfi_offset 4, -36
+ 1420              		.cfi_offset 5, -32
+ 1421              		.cfi_offset 6, -28
+ 1422              		.cfi_offset 7, -24
+ 1423              		.cfi_offset 8, -20
+ 1424              		.cfi_offset 9, -16
+ 1425              		.cfi_offset 10, -12
+ 1426              		.cfi_offset 11, -8
+ 1427              		.cfi_offset 14, -4
+ 1428 0004 83B0     		sub	sp, sp, #12
+ 1429              	.LCFI32:
+ 1430              		.cfi_def_cfa_offset 48
+ 1431 0006 8246     		mov	r10, r0
+ 1432 0008 1446     		mov	r4, r2
+ 1433 000a 1E46     		mov	r6, r3
+ 1434 000c DDF83090 		ldr	r9, [sp, #48]
+ 1435 0010 DDF83480 		ldr	r8, [sp, #52]
+ 1436              	.LVL193:
+ 372:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_y = y;
+ 1437              		.loc 1 372 0
+ 1438 0014 164B     		ldr	r3, .L91
+ 1439              	.LVL194:
+ARM GAS  /tmp/ccYW1LjA.s 			page 36
+
+
+ 1440 0016 1880     		strh	r0, [r3]	@ movhi
+ 373:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 1441              		.loc 1 373 0
+ 1442 0018 164B     		ldr	r3, .L91+4
+ 1443 001a 1980     		strh	r1, [r3]	@ movhi
+ 394:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 1444              		.loc 1 394 0
+ 1445 001c 1D46     		mov	r5, r3
+ 1446 001e 144F     		ldr	r7, .L91
+ 381:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 				str++;
+ 1447              		.loc 1 381 0
+ 1448 0020 4FF0000B 		mov	fp, #0
+ 375:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		/* New line */
+ 1449              		.loc 1 375 0
+ 1450 0024 0FE0     		b	.L80
+ 1451              	.LVL195:
+ 1452              	.L89:
+ 378:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			/* if after \n is also \r, than go to the left of the screen */
+ 1453              		.loc 1 378 0
+ 1454 0026 2B88     		ldrh	r3, [r5]
+ 1455 0028 5A1C     		adds	r2, r3, #1
+ 1456 002a 7378     		ldrb	r3, [r6, #1]	@ zero_extendqisi2
+ 1457 002c 1344     		add	r3, r3, r2
+ 1458 002e 2B80     		strh	r3, [r5]	@ movhi
+ 380:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 				ILI9341_x = 0;
+ 1459              		.loc 1 380 0
+ 1460 0030 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+ 1461 0032 0D2B     		cmp	r3, #13
+ 381:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 				str++;
+ 1462              		.loc 1 381 0
+ 1463 0034 06BF     		itte	eq
+ 1464 0036 A7F800B0 		strheq	fp, [r7]	@ movhi
+ 382:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			} else {
+ 1465              		.loc 1 382 0
+ 1466 003a 0134     		addeq	r4, r4, #1
+ 1467              	.LVL196:
+ 384:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			}
+ 1468              		.loc 1 384 0
+ 1469 003c A7F800A0 		strhne	r10, [r7]	@ movhi
+ 386:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			continue;
+ 1470              		.loc 1 386 0
+ 1471 0040 0134     		adds	r4, r4, #1
+ 1472              	.LVL197:
+ 387:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		} else if (*str == '\r') {
+ 1473              		.loc 1 387 0
+ 1474 0042 00E0     		b	.L80
+ 1475              	.L90:
+ 389:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			continue;
+ 1476              		.loc 1 389 0
+ 1477 0044 0134     		adds	r4, r4, #1
+ 1478              	.LVL198:
+ 1479              	.L80:
+ 375:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		/* New line */
+ 1480              		.loc 1 375 0
+ 1481 0046 2278     		ldrb	r2, [r4]	@ zero_extendqisi2
+ 1482 0048 72B1     		cbz	r2, .L88
+ 377:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			ILI9341_y += font->FontHeight + 1;
+ARM GAS  /tmp/ccYW1LjA.s 			page 37
+
+
+ 1483              		.loc 1 377 0
+ 1484 004a 0A2A     		cmp	r2, #10
+ 1485 004c EBD0     		beq	.L89
+ 388:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			str++;
+ 1486              		.loc 1 388 0
+ 1487 004e 0D2A     		cmp	r2, #13
+ 1488 0050 F8D0     		beq	.L90
+ 394:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 1489              		.loc 1 394 0
+ 1490 0052 0134     		adds	r4, r4, #1
+ 1491              	.LVL199:
+ 1492 0054 2988     		ldrh	r1, [r5]
+ 1493 0056 3888     		ldrh	r0, [r7]
+ 1494 0058 CDF80480 		str	r8, [sp, #4]
+ 1495 005c CDF80090 		str	r9, [sp]
+ 1496 0060 3346     		mov	r3, r6
+ 1497 0062 FFF7FEFF 		bl	TM_ILI9341_Putc
+ 1498              	.LVL200:
+ 1499 0066 EEE7     		b	.L80
+ 1500              	.L88:
+ 396:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 1501              		.loc 1 396 0
+ 1502 0068 03B0     		add	sp, sp, #12
+ 1503              	.LCFI33:
+ 1504              		.cfi_def_cfa_offset 36
+ 1505              		@ sp needed
+ 1506 006a BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 1507              	.LVL201:
+ 1508              	.L92:
+ 1509 006e 00BF     		.align	2
+ 1510              	.L91:
+ 1511 0070 00000000 		.word	ILI9341_x
+ 1512 0074 00000000 		.word	ILI9341_y
+ 1513              		.cfi_endproc
+ 1514              	.LFE142:
+ 1516              		.section	.text.TM_ILI9341_DrawLine,"ax",%progbits
+ 1517              		.align	1
+ 1518              		.global	TM_ILI9341_DrawLine
+ 1519              		.syntax unified
+ 1520              		.thumb
+ 1521              		.thumb_func
+ 1522              		.fpu fpv4-sp-d16
+ 1524              	TM_ILI9341_DrawLine:
+ 1525              	.LFB145:
+ 435:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 436:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 437:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_DrawLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint32_t color) {
+ 1526              		.loc 1 437 0
+ 1527              		.cfi_startproc
+ 1528              		@ args = 4, pretend = 0, frame = 16
+ 1529              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1530              	.LVL202:
+ 1531 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 1532              	.LCFI34:
+ 1533              		.cfi_def_cfa_offset 36
+ 1534              		.cfi_offset 4, -36
+ 1535              		.cfi_offset 5, -32
+ARM GAS  /tmp/ccYW1LjA.s 			page 38
+
+
+ 1536              		.cfi_offset 6, -28
+ 1537              		.cfi_offset 7, -24
+ 1538              		.cfi_offset 8, -20
+ 1539              		.cfi_offset 9, -16
+ 1540              		.cfi_offset 10, -12
+ 1541              		.cfi_offset 11, -8
+ 1542              		.cfi_offset 14, -4
+ 1543 0004 87B0     		sub	sp, sp, #28
+ 1544              	.LCFI35:
+ 1545              		.cfi_def_cfa_offset 64
+ 1546 0006 0446     		mov	r4, r0
+ 1547 0008 0D46     		mov	r5, r1
+ 1548 000a 1746     		mov	r7, r2
+ 1549 000c 9A46     		mov	r10, r3
+ 438:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Code by dewoller: https://github.com/dewoller */
+ 439:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 440:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	int16_t dx, dy, sx, sy, err, e2; 	
+ 441:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	uint16_t tmp;
+ 442:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 443:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Check for overflow */
+ 444:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	if (x0 >= ILI9341_Opts.width) {
+ 1550              		.loc 1 444 0
+ 1551 000e 3D4B     		ldr	r3, .L116
+ 1552              	.LVL203:
+ 1553 0010 1B88     		ldrh	r3, [r3]
+ 1554 0012 8342     		cmp	r3, r0
+ 445:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		x0 = ILI9341_Opts.width - 1;
+ 1555              		.loc 1 445 0
+ 1556 0014 9CBF     		itt	ls
+ 1557 0016 03F1FF34 		addls	r4, r3, #-1
+ 1558 001a A4B2     		uxthls	r4, r4
+ 1559              	.LVL204:
+ 446:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 447:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	if (x1 >= ILI9341_Opts.width) {
+ 1560              		.loc 1 447 0
+ 1561 001c 9342     		cmp	r3, r2
+ 448:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		x1 = ILI9341_Opts.width - 1;
+ 1562              		.loc 1 448 0
+ 1563 001e 9CBF     		itt	ls
+ 1564 0020 03F1FF37 		addls	r7, r3, #-1
+ 1565 0024 BFB2     		uxthls	r7, r7
+ 1566              	.LVL205:
+ 449:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 450:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	if (y0 >= ILI9341_Opts.height) {
+ 1567              		.loc 1 450 0
+ 1568 0026 374B     		ldr	r3, .L116
+ 1569 0028 5B88     		ldrh	r3, [r3, #2]
+ 1570 002a 8B42     		cmp	r3, r1
+ 451:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		y0 = ILI9341_Opts.height - 1;
+ 1571              		.loc 1 451 0
+ 1572 002c 9CBF     		itt	ls
+ 1573 002e 03F1FF35 		addls	r5, r3, #-1
+ 1574 0032 ADB2     		uxthls	r5, r5
+ 1575              	.LVL206:
+ 452:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 453:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	if (y1 >= ILI9341_Opts.height) {
+ 1576              		.loc 1 453 0
+ARM GAS  /tmp/ccYW1LjA.s 			page 39
+
+
+ 1577 0034 5345     		cmp	r3, r10
+ 454:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		y1 = ILI9341_Opts.height - 1;
+ 1578              		.loc 1 454 0
+ 1579 0036 9CBF     		itt	ls
+ 1580 0038 03F1FF3A 		addls	r10, r3, #-1
+ 1581 003c 1FFA8AFA 		uxthls	r10, r10
+ 1582              	.LVL207:
+ 455:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 456:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 457:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Check correction */
+ 458:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	if (x0 > x1) {
+ 1583              		.loc 1 458 0
+ 1584 0040 BC42     		cmp	r4, r7
+ 1585 0042 02D9     		bls	.L98
+ 1586 0044 2346     		mov	r3, r4
+ 459:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		tmp = x0;
+ 460:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		x0 = x1;
+ 1587              		.loc 1 460 0
+ 1588 0046 3C46     		mov	r4, r7
+ 1589              	.LVL208:
+ 461:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		x1 = tmp;
+ 1590              		.loc 1 461 0
+ 1591 0048 1F46     		mov	r7, r3
+ 1592              	.LVL209:
+ 1593              	.L98:
+ 462:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 463:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	if (y0 > y1) {
+ 1594              		.loc 1 463 0
+ 1595 004a 5545     		cmp	r5, r10
+ 1596 004c 02D9     		bls	.L99
+ 1597 004e 2B46     		mov	r3, r5
+ 464:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		tmp = y0;
+ 465:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		y0 = y1;
+ 1598              		.loc 1 465 0
+ 1599 0050 5546     		mov	r5, r10
+ 1600              	.LVL210:
+ 466:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		y1 = tmp;
+ 1601              		.loc 1 466 0
+ 1602 0052 9A46     		mov	r10, r3
+ 1603              	.LVL211:
+ 1604              	.L99:
+ 467:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 468:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 469:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	dx = x1 - x0;
+ 1605              		.loc 1 469 0
+ 1606 0054 A7EB040B 		sub	fp, r7, r4
+ 1607 0058 1FFA8BFB 		uxth	fp, fp
+ 1608 005c 0FFA8BF3 		sxth	r3, fp
+ 1609              	.LVL212:
+ 470:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	dy = y1 - y0;
+ 471:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 472:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Vertical or horizontal line */
+ 473:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	if (dx == 0 || dy == 0) {
+ 1610              		.loc 1 473 0
+ 1611 0060 FBB1     		cbz	r3, .L100
+ 470:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	dy = y1 - y0;
+ 1612              		.loc 1 470 0 discriminator 1
+ARM GAS  /tmp/ccYW1LjA.s 			page 40
+
+
+ 1613 0062 AAEB0502 		sub	r2, r10, r5
+ 1614 0066 92B2     		uxth	r2, r2
+ 1615 0068 1146     		mov	r1, r2
+ 1616 006a 0FFA82F9 		sxth	r9, r2
+ 1617              		.loc 1 473 0 discriminator 1
+ 1618 006e B9F1000F 		cmp	r9, #0
+ 1619 0072 16D0     		beq	.L100
+ 474:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		TM_ILI9341_INT_Fill(x0, y0, x1, y1, color);
+ 475:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		return;
+ 476:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 477:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 478:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	sx = (x0 < x1) ? 1 : -1; 
+ 1620              		.loc 1 478 0
+ 1621 0074 BC42     		cmp	r4, r7
+ 1622 0076 34BF     		ite	cc
+ 1623 0078 0122     		movcc	r2, #1
+ 1624 007a 4FF0FF32 		movcs	r2, #-1
+ 1625 007e 0392     		str	r2, [sp, #12]
+ 1626              	.LVL213:
+ 479:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	sy = (y0 < y1) ? 1 : -1; 
+ 1627              		.loc 1 479 0
+ 1628 0080 5545     		cmp	r5, r10
+ 1629 0082 34BF     		ite	cc
+ 1630 0084 0122     		movcc	r2, #1
+ 1631 0086 4FF0FF32 		movcs	r2, #-1
+ 1632 008a 0492     		str	r2, [sp, #16]
+ 1633              	.LVL214:
+ 480:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	err = ((dx > dy) ? dx : -dy) / 2; 
+ 1634              		.loc 1 480 0
+ 1635 008c 4B45     		cmp	r3, r9
+ 1636 008e 14DD     		ble	.L105
+ 1637              		.loc 1 480 0 is_stmt 0 discriminator 1
+ 1638 0090 03EBD376 		add	r6, r3, r3, lsr #31
+ 1639 0094 7610     		asrs	r6, r6, #1
+ 1640              	.L107:
+ 481:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 482:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	while (1) {
+ 483:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		TM_ILI9341_DrawPixel(x0, y0, color); 
+ 484:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		if (x0 == x1 && y0 == y1) {
+ 485:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			break;
+ 486:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		}
+ 487:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		e2 = err; 
+ 488:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		if (e2 > -dx) {
+ 1641              		.loc 1 488 0 is_stmt 1
+ 1642 0096 C3F10008 		rsb	r8, r3, #0
+ 1643 009a CDF814A0 		str	r10, [sp, #20]
+ 1644 009e 8A46     		mov	r10, r1
+ 1645              	.LVL215:
+ 1646 00a0 13E0     		b	.L106
+ 1647              	.LVL216:
+ 1648              	.L100:
+ 474:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		return;
+ 1649              		.loc 1 474 0
+ 1650 00a2 109B     		ldr	r3, [sp, #64]
+ 1651              	.LVL217:
+ 1652 00a4 9BB2     		uxth	r3, r3
+ 1653 00a6 0093     		str	r3, [sp]
+ARM GAS  /tmp/ccYW1LjA.s 			page 41
+
+
+ 1654 00a8 5346     		mov	r3, r10
+ 1655 00aa 3A46     		mov	r2, r7
+ 1656 00ac 2946     		mov	r1, r5
+ 1657 00ae 2046     		mov	r0, r4
+ 1658 00b0 FFF7FEFF 		bl	TM_ILI9341_INT_Fill
+ 1659              	.LVL218:
+ 1660              	.L93:
+ 489:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			err -= dy;
+ 490:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			x0 += sx;
+ 491:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		} 
+ 492:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		if (e2 < dy) {
+ 493:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			err += dx;
+ 494:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			y0 += sy;
+ 495:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		} 
+ 496:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 497:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 1661              		.loc 1 497 0
+ 1662 00b4 07B0     		add	sp, sp, #28
+ 1663              	.LCFI36:
+ 1664              		.cfi_remember_state
+ 1665              		.cfi_def_cfa_offset 36
+ 1666              		@ sp needed
+ 1667 00b6 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 1668              	.LVL219:
+ 1669              	.L105:
+ 1670              	.LCFI37:
+ 1671              		.cfi_restore_state
+ 480:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 1672              		.loc 1 480 0 discriminator 2
+ 1673 00ba C9F10006 		rsb	r6, r9, #0
+ 1674 00be 06EBD676 		add	r6, r6, r6, lsr #31
+ 1675 00c2 46F34F06 		sbfx	r6, r6, #1, #16
+ 1676 00c6 E6E7     		b	.L107
+ 1677              	.LVL220:
+ 1678              	.L110:
+ 479:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	err = ((dx > dy) ? dx : -dy) / 2; 
+ 1679              		.loc 1 479 0
+ 1680 00c8 1E46     		mov	r6, r3
+ 1681              	.LVL221:
+ 1682              	.L106:
+ 483:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		if (x0 == x1 && y0 == y1) {
+ 1683              		.loc 1 483 0
+ 1684 00ca 109A     		ldr	r2, [sp, #64]
+ 1685 00cc 2946     		mov	r1, r5
+ 1686 00ce 2046     		mov	r0, r4
+ 1687 00d0 FFF7FEFF 		bl	TM_ILI9341_DrawPixel
+ 1688              	.LVL222:
+ 484:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			break;
+ 1689              		.loc 1 484 0
+ 1690 00d4 BC42     		cmp	r4, r7
+ 1691 00d6 0FD0     		beq	.L115
+ 1692              	.L108:
+ 1693              	.LVL223:
+ 488:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			err -= dy;
+ 1694              		.loc 1 488 0
+ 1695 00d8 4645     		cmp	r6, r8
+ 1696 00da 11DD     		ble	.L113
+ARM GAS  /tmp/ccYW1LjA.s 			page 42
+
+
+ 489:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			x0 += sx;
+ 1697              		.loc 1 489 0
+ 1698 00dc A6EB0A03 		sub	r3, r6, r10
+ 1699 00e0 1BB2     		sxth	r3, r3
+ 1700              	.LVL224:
+ 490:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		} 
+ 1701              		.loc 1 490 0
+ 1702 00e2 039A     		ldr	r2, [sp, #12]
+ 1703 00e4 1444     		add	r4, r4, r2
+ 1704              	.LVL225:
+ 1705 00e6 A4B2     		uxth	r4, r4
+ 1706              	.LVL226:
+ 1707              	.L109:
+ 492:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			err += dx;
+ 1708              		.loc 1 492 0
+ 1709 00e8 4E45     		cmp	r6, r9
+ 1710 00ea EDDA     		bge	.L110
+ 493:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			y0 += sy;
+ 1711              		.loc 1 493 0
+ 1712 00ec 5B44     		add	r3, r3, fp
+ 1713              	.LVL227:
+ 1714 00ee 1BB2     		sxth	r3, r3
+ 1715              	.LVL228:
+ 494:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		} 
+ 1716              		.loc 1 494 0
+ 1717 00f0 049A     		ldr	r2, [sp, #16]
+ 1718 00f2 1544     		add	r5, r5, r2
+ 1719              	.LVL229:
+ 1720 00f4 ADB2     		uxth	r5, r5
+ 1721              	.LVL230:
+ 1722 00f6 E7E7     		b	.L110
+ 1723              	.LVL231:
+ 1724              	.L115:
+ 484:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 			break;
+ 1725              		.loc 1 484 0 discriminator 1
+ 1726 00f8 059B     		ldr	r3, [sp, #20]
+ 1727 00fa 9D42     		cmp	r5, r3
+ 1728 00fc ECD1     		bne	.L108
+ 1729 00fe D9E7     		b	.L93
+ 1730              	.LVL232:
+ 1731              	.L113:
+ 1732 0100 3346     		mov	r3, r6
+ 1733 0102 F1E7     		b	.L109
+ 1734              	.L117:
+ 1735              		.align	2
+ 1736              	.L116:
+ 1737 0104 00000000 		.word	ILI9341_Opts
+ 1738              		.cfi_endproc
+ 1739              	.LFE145:
+ 1741              		.section	.text.TM_ILI9341_DrawRectangle,"ax",%progbits
+ 1742              		.align	1
+ 1743              		.global	TM_ILI9341_DrawRectangle
+ 1744              		.syntax unified
+ 1745              		.thumb
+ 1746              		.thumb_func
+ 1747              		.fpu fpv4-sp-d16
+ 1749              	TM_ILI9341_DrawRectangle:
+ARM GAS  /tmp/ccYW1LjA.s 			page 43
+
+
+ 1750              	.LFB146:
+ 498:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 499:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_DrawRectangle(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint32_t color) {
+ 1751              		.loc 1 499 0
+ 1752              		.cfi_startproc
+ 1753              		@ args = 4, pretend = 0, frame = 0
+ 1754              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1755              	.LVL233:
+ 1756 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 1757              	.LCFI38:
+ 1758              		.cfi_def_cfa_offset 24
+ 1759              		.cfi_offset 4, -24
+ 1760              		.cfi_offset 5, -20
+ 1761              		.cfi_offset 6, -16
+ 1762              		.cfi_offset 7, -12
+ 1763              		.cfi_offset 8, -8
+ 1764              		.cfi_offset 14, -4
+ 1765 0004 82B0     		sub	sp, sp, #8
+ 1766              	.LCFI39:
+ 1767              		.cfi_def_cfa_offset 32
+ 1768 0006 0646     		mov	r6, r0
+ 1769 0008 8846     		mov	r8, r1
+ 1770 000a 1746     		mov	r7, r2
+ 1771 000c 1C46     		mov	r4, r3
+ 1772 000e 089D     		ldr	r5, [sp, #32]
+ 500:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_DrawLine(x0, y0, x1, y0, color); //Top
+ 1773              		.loc 1 500 0
+ 1774 0010 0095     		str	r5, [sp]
+ 1775 0012 0B46     		mov	r3, r1
+ 1776              	.LVL234:
+ 1777 0014 FFF7FEFF 		bl	TM_ILI9341_DrawLine
+ 1778              	.LVL235:
+ 501:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_DrawLine(x0, y0, x0, y1, color);	//Left
+ 1779              		.loc 1 501 0
+ 1780 0018 0095     		str	r5, [sp]
+ 1781 001a 2346     		mov	r3, r4
+ 1782 001c 3246     		mov	r2, r6
+ 1783 001e 4146     		mov	r1, r8
+ 1784 0020 3046     		mov	r0, r6
+ 1785 0022 FFF7FEFF 		bl	TM_ILI9341_DrawLine
+ 1786              	.LVL236:
+ 502:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_DrawLine(x1, y0, x1, y1, color);	//Right
+ 1787              		.loc 1 502 0
+ 1788 0026 0095     		str	r5, [sp]
+ 1789 0028 2346     		mov	r3, r4
+ 1790 002a 3A46     		mov	r2, r7
+ 1791 002c 4146     		mov	r1, r8
+ 1792 002e 3846     		mov	r0, r7
+ 1793 0030 FFF7FEFF 		bl	TM_ILI9341_DrawLine
+ 1794              	.LVL237:
+ 503:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_DrawLine(x0, y1, x1, y1, color);	//Bottom
+ 1795              		.loc 1 503 0
+ 1796 0034 0095     		str	r5, [sp]
+ 1797 0036 2346     		mov	r3, r4
+ 1798 0038 3A46     		mov	r2, r7
+ 1799 003a 2146     		mov	r1, r4
+ 1800 003c 3046     		mov	r0, r6
+ARM GAS  /tmp/ccYW1LjA.s 			page 44
+
+
+ 1801 003e FFF7FEFF 		bl	TM_ILI9341_DrawLine
+ 1802              	.LVL238:
+ 504:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 1803              		.loc 1 504 0
+ 1804 0042 02B0     		add	sp, sp, #8
+ 1805              	.LCFI40:
+ 1806              		.cfi_def_cfa_offset 24
+ 1807              		@ sp needed
+ 1808 0044 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 1809              		.cfi_endproc
+ 1810              	.LFE146:
+ 1812              		.section	.text.TM_ILI9341_DrawFilledRectangle,"ax",%progbits
+ 1813              		.align	1
+ 1814              		.global	TM_ILI9341_DrawFilledRectangle
+ 1815              		.syntax unified
+ 1816              		.thumb
+ 1817              		.thumb_func
+ 1818              		.fpu fpv4-sp-d16
+ 1820              	TM_ILI9341_DrawFilledRectangle:
+ 1821              	.LFB147:
+ 505:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 506:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_DrawFilledRectangle(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint32_t co
+ 1822              		.loc 1 506 0
+ 1823              		.cfi_startproc
+ 1824              		@ args = 4, pretend = 0, frame = 0
+ 1825              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1826              	.LVL239:
+ 1827 0000 10B5     		push	{r4, lr}
+ 1828              	.LCFI41:
+ 1829              		.cfi_def_cfa_offset 8
+ 1830              		.cfi_offset 4, -8
+ 1831              		.cfi_offset 14, -4
+ 1832 0002 82B0     		sub	sp, sp, #8
+ 1833              	.LCFI42:
+ 1834              		.cfi_def_cfa_offset 16
+ 507:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	uint16_t tmp;
+ 508:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 509:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Check correction */
+ 510:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	if (x0 > x1) {
+ 1835              		.loc 1 510 0
+ 1836 0004 9042     		cmp	r0, r2
+ 1837 0006 02D9     		bls	.L121
+ 1838 0008 0446     		mov	r4, r0
+ 511:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		tmp = x0;
+ 512:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		x0 = x1;
+ 1839              		.loc 1 512 0
+ 1840 000a 1046     		mov	r0, r2
+ 1841              	.LVL240:
+ 513:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		x1 = tmp;
+ 1842              		.loc 1 513 0
+ 1843 000c 2246     		mov	r2, r4
+ 1844              	.LVL241:
+ 1845              	.L121:
+ 514:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 515:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	if (y0 > y1) {
+ 1846              		.loc 1 515 0
+ 1847 000e 9942     		cmp	r1, r3
+ARM GAS  /tmp/ccYW1LjA.s 			page 45
+
+
+ 1848 0010 02D9     		bls	.L122
+ 1849 0012 0C46     		mov	r4, r1
+ 516:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		tmp = y0;
+ 517:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		y0 = y1;
+ 1850              		.loc 1 517 0
+ 1851 0014 1946     		mov	r1, r3
+ 1852              	.LVL242:
+ 518:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 		y1 = tmp;
+ 1853              		.loc 1 518 0
+ 1854 0016 2346     		mov	r3, r4
+ 1855              	.LVL243:
+ 1856              	.L122:
+ 519:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	}
+ 520:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 521:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* Fill rectangle */
+ 522:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	TM_ILI9341_INT_Fill(x0, y0, x1, y1, color);
+ 1857              		.loc 1 522 0
+ 1858 0018 BDF81040 		ldrh	r4, [sp, #16]
+ 1859 001c 0094     		str	r4, [sp]
+ 1860 001e FFF7FEFF 		bl	TM_ILI9341_INT_Fill
+ 1861              	.LVL244:
+ 523:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	
+ 524:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	/* CS HIGH back */
+ 525:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	ILI9341_CS_SET;
+ 1862              		.loc 1 525 0
+ 1863 0022 0122     		movs	r2, #1
+ 1864 0024 8021     		movs	r1, #128
+ 1865 0026 0248     		ldr	r0, .L124
+ 1866 0028 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1867              	.LVL245:
+ 526:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 1868              		.loc 1 526 0
+ 1869 002c 02B0     		add	sp, sp, #8
+ 1870              	.LCFI43:
+ 1871              		.cfi_def_cfa_offset 8
+ 1872              		@ sp needed
+ 1873 002e 10BD     		pop	{r4, pc}
+ 1874              	.LVL246:
+ 1875              	.L125:
+ 1876              		.align	2
+ 1877              	.L124:
+ 1878 0030 00080240 		.word	1073874944
+ 1879              		.cfi_endproc
+ 1880              	.LFE147:
+ 1882              		.section	.text.TM_ILI9341_DrawCircle,"ax",%progbits
+ 1883              		.align	1
+ 1884              		.global	TM_ILI9341_DrawCircle
+ 1885              		.syntax unified
+ 1886              		.thumb
+ 1887              		.thumb_func
+ 1888              		.fpu fpv4-sp-d16
+ 1890              	TM_ILI9341_DrawCircle:
+ 1891              	.LFB148:
+ 527:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 528:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_DrawCircle(int16_t x0, int16_t y0, int16_t r, uint32_t color) {
+ 1892              		.loc 1 528 0
+ 1893              		.cfi_startproc
+ARM GAS  /tmp/ccYW1LjA.s 			page 46
+
+
+ 1894              		@ args = 0, pretend = 0, frame = 16
+ 1895              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1896              	.LVL247:
+ 1897 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 1898              	.LCFI44:
+ 1899              		.cfi_def_cfa_offset 36
+ 1900              		.cfi_offset 4, -36
+ 1901              		.cfi_offset 5, -32
+ 1902              		.cfi_offset 6, -28
+ 1903              		.cfi_offset 7, -24
+ 1904              		.cfi_offset 8, -20
+ 1905              		.cfi_offset 9, -16
+ 1906              		.cfi_offset 10, -12
+ 1907              		.cfi_offset 11, -8
+ 1908              		.cfi_offset 14, -4
+ 1909 0004 85B0     		sub	sp, sp, #20
+ 1910              	.LCFI45:
+ 1911              		.cfi_def_cfa_offset 56
+ 1912 0006 1746     		mov	r7, r2
+ 1913 0008 0192     		str	r2, [sp, #4]
+ 1914 000a 1E46     		mov	r6, r3
+ 1915 000c 0093     		str	r3, [sp]
+ 529:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	int16_t f = 1 - r;
+ 1916              		.loc 1 529 0
+ 1917 000e 94B2     		uxth	r4, r2
+ 1918              	.LVL248:
+ 530:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	int16_t ddF_x = 1;
+ 531:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	int16_t ddF_y = -2 * r;
+ 1919              		.loc 1 531 0
+ 1920 0010 C4EBC433 		rsb	r3, r4, r4, lsl #15
+ 1921              	.LVL249:
+ 1922 0014 5B00     		lsls	r3, r3, #1
+ 1923 0016 1AB2     		sxth	r2, r3
+ 1924              	.LVL250:
+ 1925 0018 0392     		str	r2, [sp, #12]
+ 1926              	.LVL251:
+ 532:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	int16_t x = 0;
+ 533:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	int16_t y = r;
+ 534:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 535:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****     TM_ILI9341_DrawPixel(x0, y0 + r, color);
+ 1927              		.loc 1 535 0
+ 1928 001a 1FFA80FA 		uxth	r10, r0
+ 1929 001e 1FFA81FB 		uxth	fp, r1
+ 1930 0022 04EB0B01 		add	r1, r4, fp
+ 1931              	.LVL252:
+ 1932 0026 3246     		mov	r2, r6
+ 1933 0028 89B2     		uxth	r1, r1
+ 1934 002a 5046     		mov	r0, r10
+ 1935 002c FFF7FEFF 		bl	TM_ILI9341_DrawPixel
+ 1936              	.LVL253:
+ 536:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****     TM_ILI9341_DrawPixel(x0, y0 - r, color);
+ 1937              		.loc 1 536 0
+ 1938 0030 ABEB0401 		sub	r1, fp, r4
+ 1939 0034 3246     		mov	r2, r6
+ 1940 0036 89B2     		uxth	r1, r1
+ 1941 0038 5046     		mov	r0, r10
+ 1942 003a FFF7FEFF 		bl	TM_ILI9341_DrawPixel
+ARM GAS  /tmp/ccYW1LjA.s 			page 47
+
+
+ 1943              	.LVL254:
+ 537:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****     TM_ILI9341_DrawPixel(x0 + r, y0, color);
+ 1944              		.loc 1 537 0
+ 1945 003e 04EB0A00 		add	r0, r4, r10
+ 1946 0042 3246     		mov	r2, r6
+ 1947 0044 5946     		mov	r1, fp
+ 1948 0046 80B2     		uxth	r0, r0
+ 1949 0048 FFF7FEFF 		bl	TM_ILI9341_DrawPixel
+ 1950              	.LVL255:
+ 538:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****     TM_ILI9341_DrawPixel(x0 - r, y0, color);
+ 1951              		.loc 1 538 0
+ 1952 004c AAEB0400 		sub	r0, r10, r4
+ 1953 0050 3246     		mov	r2, r6
+ 1954 0052 5946     		mov	r1, fp
+ 1955 0054 80B2     		uxth	r0, r0
+ 1956 0056 FFF7FEFF 		bl	TM_ILI9341_DrawPixel
+ 1957              	.LVL256:
+ 539:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 540:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****     while (x < y) {
+ 1958              		.loc 1 540 0
+ 1959 005a 002F     		cmp	r7, #0
+ 1960 005c 67DD     		ble	.L126
+ 1961 005e C4F10105 		rsb	r5, r4, #1
+ 1962 0062 2DB2     		sxth	r5, r5
+ 532:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	int16_t y = r;
+ 1963              		.loc 1 532 0
+ 1964 0064 4FF00009 		mov	r9, #0
+ 1965 0068 53E0     		b	.L129
+ 1966              	.LVL257:
+ 1967              	.L128:
+ 1968 006a 09F10104 		add	r4, r9, #1
+ 1969 006e A4B2     		uxth	r4, r4
+ 1970 0070 0FFA84F9 		sxth	r9, r4
+ 1971              	.LVL258:
+ 541:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         if (f >= 0) {
+ 542:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****             y--;
+ 543:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****             ddF_y += 2;
+ 544:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****             f += ddF_y;
+ 545:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         }
+ 546:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         x++;
+ 547:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         ddF_x += 2;
+ 548:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         f += ddF_x;
+ 1972              		.loc 1 548 0
+ 1973 0074 05EB4405 		add	r5, r5, r4, lsl #1
+ 1974              	.LVL259:
+ 1975 0078 0135     		adds	r5, r5, #1
+ 1976 007a 2DB2     		sxth	r5, r5
+ 1977              	.LVL260:
+ 1978 007c 0AEB0403 		add	r3, r10, r4
+ 1979 0080 9BB2     		uxth	r3, r3
+ 549:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 550:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         TM_ILI9341_DrawPixel(x0 + x, y0 + y, color);
+ 1980              		.loc 1 550 0
+ 1981 0082 BDF80460 		ldrh	r6, [sp, #4]
+ 1982 0086 0BEB0608 		add	r8, fp, r6
+ 1983 008a 1FFA88F8 		uxth	r8, r8
+ 1984 008e 009A     		ldr	r2, [sp]
+ARM GAS  /tmp/ccYW1LjA.s 			page 48
+
+
+ 1985 0090 4146     		mov	r1, r8
+ 1986 0092 0293     		str	r3, [sp, #8]
+ 1987 0094 1846     		mov	r0, r3
+ 1988 0096 FFF7FEFF 		bl	TM_ILI9341_DrawPixel
+ 1989              	.LVL261:
+ 1990 009a AAEB0407 		sub	r7, r10, r4
+ 1991 009e BFB2     		uxth	r7, r7
+ 551:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         TM_ILI9341_DrawPixel(x0 - x, y0 + y, color);
+ 1992              		.loc 1 551 0
+ 1993 00a0 009A     		ldr	r2, [sp]
+ 1994 00a2 4146     		mov	r1, r8
+ 1995 00a4 3846     		mov	r0, r7
+ 1996 00a6 FFF7FEFF 		bl	TM_ILI9341_DrawPixel
+ 1997              	.LVL262:
+ 552:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         TM_ILI9341_DrawPixel(x0 + x, y0 - y, color);
+ 1998              		.loc 1 552 0
+ 1999 00aa ABEB0608 		sub	r8, fp, r6
+ 2000 00ae 1FFA88F8 		uxth	r8, r8
+ 2001 00b2 009A     		ldr	r2, [sp]
+ 2002 00b4 4146     		mov	r1, r8
+ 2003 00b6 0298     		ldr	r0, [sp, #8]
+ 2004 00b8 FFF7FEFF 		bl	TM_ILI9341_DrawPixel
+ 2005              	.LVL263:
+ 553:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         TM_ILI9341_DrawPixel(x0 - x, y0 - y, color);
+ 2006              		.loc 1 553 0
+ 2007 00bc 009A     		ldr	r2, [sp]
+ 2008 00be 4146     		mov	r1, r8
+ 2009 00c0 3846     		mov	r0, r7
+ 2010 00c2 FFF7FEFF 		bl	TM_ILI9341_DrawPixel
+ 2011              	.LVL264:
+ 554:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 555:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         TM_ILI9341_DrawPixel(x0 + y, y0 + x, color);
+ 2012              		.loc 1 555 0
+ 2013 00c6 0AEB0607 		add	r7, r10, r6
+ 2014 00ca BFB2     		uxth	r7, r7
+ 2015 00cc 0BEB0408 		add	r8, fp, r4
+ 2016 00d0 1FFA88F8 		uxth	r8, r8
+ 2017 00d4 009A     		ldr	r2, [sp]
+ 2018 00d6 4146     		mov	r1, r8
+ 2019 00d8 3846     		mov	r0, r7
+ 2020 00da FFF7FEFF 		bl	TM_ILI9341_DrawPixel
+ 2021              	.LVL265:
+ 556:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         TM_ILI9341_DrawPixel(x0 - y, y0 + x, color);
+ 2022              		.loc 1 556 0
+ 2023 00de AAEB0606 		sub	r6, r10, r6
+ 2024 00e2 B6B2     		uxth	r6, r6
+ 2025 00e4 009A     		ldr	r2, [sp]
+ 2026 00e6 4146     		mov	r1, r8
+ 2027 00e8 3046     		mov	r0, r6
+ 2028 00ea FFF7FEFF 		bl	TM_ILI9341_DrawPixel
+ 2029              	.LVL266:
+ 2030 00ee ABEB0404 		sub	r4, fp, r4
+ 2031 00f2 A4B2     		uxth	r4, r4
+ 557:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         TM_ILI9341_DrawPixel(x0 + y, y0 - x, color);
+ 2032              		.loc 1 557 0
+ 2033 00f4 DDF80080 		ldr	r8, [sp]
+ 2034 00f8 4246     		mov	r2, r8
+ARM GAS  /tmp/ccYW1LjA.s 			page 49
+
+
+ 2035 00fa 2146     		mov	r1, r4
+ 2036 00fc 3846     		mov	r0, r7
+ 2037 00fe FFF7FEFF 		bl	TM_ILI9341_DrawPixel
+ 2038              	.LVL267:
+ 558:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         TM_ILI9341_DrawPixel(x0 - y, y0 - x, color);
+ 2039              		.loc 1 558 0
+ 2040 0102 4246     		mov	r2, r8
+ 2041 0104 2146     		mov	r1, r4
+ 2042 0106 3046     		mov	r0, r6
+ 2043 0108 FFF7FEFF 		bl	TM_ILI9341_DrawPixel
+ 2044              	.LVL268:
+ 540:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         if (f >= 0) {
+ 2045              		.loc 1 540 0
+ 2046 010c 019B     		ldr	r3, [sp, #4]
+ 2047 010e 4B45     		cmp	r3, r9
+ 2048 0110 0DDD     		ble	.L126
+ 2049              	.LVL269:
+ 2050              	.L129:
+ 541:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****             y--;
+ 2051              		.loc 1 541 0
+ 2052 0112 002D     		cmp	r5, #0
+ 2053 0114 A9DB     		blt	.L128
+ 542:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****             ddF_y += 2;
+ 2054              		.loc 1 542 0
+ 2055 0116 019B     		ldr	r3, [sp, #4]
+ 2056 0118 013B     		subs	r3, r3, #1
+ 2057 011a 1BB2     		sxth	r3, r3
+ 2058 011c 0193     		str	r3, [sp, #4]
+ 2059              	.LVL270:
+ 543:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****             f += ddF_y;
+ 2060              		.loc 1 543 0
+ 2061 011e 039B     		ldr	r3, [sp, #12]
+ 2062 0120 0233     		adds	r3, r3, #2
+ 2063 0122 9BB2     		uxth	r3, r3
+ 2064 0124 1AB2     		sxth	r2, r3
+ 2065 0126 0392     		str	r2, [sp, #12]
+ 2066              	.LVL271:
+ 544:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         }
+ 2067              		.loc 1 544 0
+ 2068 0128 1D44     		add	r5, r5, r3
+ 2069              	.LVL272:
+ 2070 012a 2DB2     		sxth	r5, r5
+ 2071              	.LVL273:
+ 2072 012c 9DE7     		b	.L128
+ 2073              	.LVL274:
+ 2074              	.L126:
+ 559:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****     }
+ 560:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 2075              		.loc 1 560 0
+ 2076 012e 05B0     		add	sp, sp, #20
+ 2077              	.LCFI46:
+ 2078              		.cfi_def_cfa_offset 36
+ 2079              	.LVL275:
+ 2080              		@ sp needed
+ 2081 0130 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 2082              		.cfi_endproc
+ 2083              	.LFE148:
+ARM GAS  /tmp/ccYW1LjA.s 			page 50
+
+
+ 2085              		.section	.text.TM_ILI9341_DrawFilledCircle,"ax",%progbits
+ 2086              		.align	1
+ 2087              		.global	TM_ILI9341_DrawFilledCircle
+ 2088              		.syntax unified
+ 2089              		.thumb
+ 2090              		.thumb_func
+ 2091              		.fpu fpv4-sp-d16
+ 2093              	TM_ILI9341_DrawFilledCircle:
+ 2094              	.LFB149:
+ 561:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 562:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** void TM_ILI9341_DrawFilledCircle(int16_t x0, int16_t y0, int16_t r, uint32_t color) {
+ 2095              		.loc 1 562 0
+ 2096              		.cfi_startproc
+ 2097              		@ args = 0, pretend = 0, frame = 16
+ 2098              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2099              	.LVL276:
+ 2100 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 2101              	.LCFI47:
+ 2102              		.cfi_def_cfa_offset 36
+ 2103              		.cfi_offset 4, -36
+ 2104              		.cfi_offset 5, -32
+ 2105              		.cfi_offset 6, -28
+ 2106              		.cfi_offset 7, -24
+ 2107              		.cfi_offset 8, -20
+ 2108              		.cfi_offset 9, -16
+ 2109              		.cfi_offset 10, -12
+ 2110              		.cfi_offset 11, -8
+ 2111              		.cfi_offset 14, -4
+ 2112 0004 87B0     		sub	sp, sp, #28
+ 2113              	.LCFI48:
+ 2114              		.cfi_def_cfa_offset 64
+ 2115 0006 9146     		mov	r9, r2
+ 2116 0008 0392     		str	r2, [sp, #12]
+ 2117 000a 9846     		mov	r8, r3
+ 563:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	int16_t f = 1 - r;
+ 2118              		.loc 1 563 0
+ 2119 000c 94B2     		uxth	r4, r2
+ 2120 000e C4F10105 		rsb	r5, r4, #1
+ 2121              	.LVL277:
+ 564:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	int16_t ddF_x = 1;
+ 565:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	int16_t ddF_y = -2 * r;
+ 2122              		.loc 1 565 0
+ 2123 0012 C4EBC433 		rsb	r3, r4, r4, lsl #15
+ 2124              	.LVL278:
+ 2125 0016 5B00     		lsls	r3, r3, #1
+ 2126 0018 1BB2     		sxth	r3, r3
+ 2127 001a 0593     		str	r3, [sp, #20]
+ 2128              	.LVL279:
+ 566:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	int16_t x = 0;
+ 567:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	int16_t y = r;
+ 568:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 569:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****     TM_ILI9341_DrawPixel(x0, y0 + r, color);
+ 2129              		.loc 1 569 0
+ 2130 001c 1FFA80FB 		uxth	fp, r0
+ 2131 0020 8FB2     		uxth	r7, r1
+ 2132 0022 E119     		adds	r1, r4, r7
+ 2133              	.LVL280:
+ARM GAS  /tmp/ccYW1LjA.s 			page 51
+
+
+ 2134 0024 4246     		mov	r2, r8
+ 2135              	.LVL281:
+ 2136 0026 89B2     		uxth	r1, r1
+ 2137 0028 5846     		mov	r0, fp
+ 2138 002a FFF7FEFF 		bl	TM_ILI9341_DrawPixel
+ 2139              	.LVL282:
+ 570:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****     TM_ILI9341_DrawPixel(x0, y0 - r, color);
+ 2140              		.loc 1 570 0
+ 2141 002e 391B     		subs	r1, r7, r4
+ 2142 0030 4246     		mov	r2, r8
+ 2143 0032 89B2     		uxth	r1, r1
+ 2144 0034 5846     		mov	r0, fp
+ 2145 0036 FFF7FEFF 		bl	TM_ILI9341_DrawPixel
+ 2146              	.LVL283:
+ 571:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****     TM_ILI9341_DrawPixel(x0 + r, y0, color);
+ 2147              		.loc 1 571 0
+ 2148 003a 04EB0B06 		add	r6, r4, fp
+ 2149 003e B6B2     		uxth	r6, r6
+ 2150 0040 4246     		mov	r2, r8
+ 2151 0042 3946     		mov	r1, r7
+ 2152 0044 3046     		mov	r0, r6
+ 2153 0046 FFF7FEFF 		bl	TM_ILI9341_DrawPixel
+ 2154              	.LVL284:
+ 572:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****     TM_ILI9341_DrawPixel(x0 - r, y0, color);
+ 2155              		.loc 1 572 0
+ 2156 004a ABEB0404 		sub	r4, fp, r4
+ 2157              	.LVL285:
+ 2158 004e A4B2     		uxth	r4, r4
+ 2159 0050 4246     		mov	r2, r8
+ 2160 0052 3946     		mov	r1, r7
+ 2161 0054 2046     		mov	r0, r4
+ 2162 0056 FFF7FEFF 		bl	TM_ILI9341_DrawPixel
+ 2163              	.LVL286:
+ 573:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****     TM_ILI9341_DrawLine(x0 - r, y0, x0 + r, y0, color);
+ 2164              		.loc 1 573 0
+ 2165 005a CDF80080 		str	r8, [sp]
+ 2166 005e 3B46     		mov	r3, r7
+ 2167 0060 3246     		mov	r2, r6
+ 2168 0062 3946     		mov	r1, r7
+ 2169 0064 2046     		mov	r0, r4
+ 2170 0066 FFF7FEFF 		bl	TM_ILI9341_DrawLine
+ 2171              	.LVL287:
+ 574:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 575:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****     while (x < y) {
+ 2172              		.loc 1 575 0
+ 2173 006a 4B46     		mov	r3, r9
+ 2174 006c 002B     		cmp	r3, #0
+ 2175 006e 52DD     		ble	.L132
+ 2176 0070 2DB2     		sxth	r5, r5
+ 566:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 	int16_t y = r;
+ 2177              		.loc 1 566 0
+ 2178 0072 4FF0000A 		mov	r10, #0
+ 2179 0076 40E0     		b	.L135
+ 2180              	.LVL288:
+ 2181              	.L134:
+ 2182 0078 0AF10104 		add	r4, r10, #1
+ 2183 007c A4B2     		uxth	r4, r4
+ARM GAS  /tmp/ccYW1LjA.s 			page 52
+
+
+ 2184 007e 0FFA84FA 		sxth	r10, r4
+ 2185              	.LVL289:
+ 576:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         if (f >= 0) {
+ 577:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****             y--;
+ 578:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****             ddF_y += 2;
+ 579:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****             f += ddF_y;
+ 580:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         }
+ 581:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         x++;
+ 582:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         ddF_x += 2;
+ 583:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         f += ddF_x;
+ 2186              		.loc 1 583 0
+ 2187 0082 05EB4405 		add	r5, r5, r4, lsl #1
+ 2188              	.LVL290:
+ 2189 0086 0135     		adds	r5, r5, #1
+ 2190 0088 2DB2     		sxth	r5, r5
+ 2191              	.LVL291:
+ 2192 008a ABEB0409 		sub	r9, fp, r4
+ 2193 008e 1FFA89F9 		uxth	r9, r9
+ 584:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 585:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         TM_ILI9341_DrawLine(x0 - x, y0 + y, x0 + x, y0 + y, color);
+ 2194              		.loc 1 585 0
+ 2195 0092 BDF80C60 		ldrh	r6, [sp, #12]
+ 2196 0096 B919     		adds	r1, r7, r6
+ 2197 0098 89B2     		uxth	r1, r1
+ 2198 009a 0BEB0403 		add	r3, fp, r4
+ 2199 009e 9BB2     		uxth	r3, r3
+ 2200 00a0 1A46     		mov	r2, r3
+ 2201 00a2 CDF80080 		str	r8, [sp]
+ 2202 00a6 0B46     		mov	r3, r1
+ 2203 00a8 0492     		str	r2, [sp, #16]
+ 2204 00aa 4846     		mov	r0, r9
+ 2205 00ac FFF7FEFF 		bl	TM_ILI9341_DrawLine
+ 2206              	.LVL292:
+ 586:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         TM_ILI9341_DrawLine(x0 + x, y0 - y, x0 - x, y0 - y, color);
+ 2207              		.loc 1 586 0
+ 2208 00b0 B91B     		subs	r1, r7, r6
+ 2209 00b2 89B2     		uxth	r1, r1
+ 2210 00b4 CDF80080 		str	r8, [sp]
+ 2211 00b8 0B46     		mov	r3, r1
+ 2212 00ba 4A46     		mov	r2, r9
+ 2213 00bc 0498     		ldr	r0, [sp, #16]
+ 2214 00be FFF7FEFF 		bl	TM_ILI9341_DrawLine
+ 2215              	.LVL293:
+ 587:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** 
+ 588:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         TM_ILI9341_DrawLine(x0 + y, y0 + x, x0 - y, y0 + x, color);
+ 2216              		.loc 1 588 0
+ 2217 00c2 0BEB0609 		add	r9, fp, r6
+ 2218 00c6 1FFA89F9 		uxth	r9, r9
+ 2219 00ca 3919     		adds	r1, r7, r4
+ 2220 00cc 89B2     		uxth	r1, r1
+ 2221 00ce ABEB0606 		sub	r6, fp, r6
+ 2222 00d2 B6B2     		uxth	r6, r6
+ 2223 00d4 CDF80080 		str	r8, [sp]
+ 2224 00d8 0B46     		mov	r3, r1
+ 2225 00da 3246     		mov	r2, r6
+ 2226 00dc 4846     		mov	r0, r9
+ 2227 00de FFF7FEFF 		bl	TM_ILI9341_DrawLine
+ARM GAS  /tmp/ccYW1LjA.s 			page 53
+
+
+ 2228              	.LVL294:
+ 2229 00e2 391B     		subs	r1, r7, r4
+ 2230 00e4 89B2     		uxth	r1, r1
+ 589:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         TM_ILI9341_DrawLine(x0 + y, y0 - x, x0 - y, y0 - x, color);
+ 2231              		.loc 1 589 0
+ 2232 00e6 CDF80080 		str	r8, [sp]
+ 2233 00ea 0B46     		mov	r3, r1
+ 2234 00ec 3246     		mov	r2, r6
+ 2235 00ee 4846     		mov	r0, r9
+ 2236 00f0 FFF7FEFF 		bl	TM_ILI9341_DrawLine
+ 2237              	.LVL295:
+ 575:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         if (f >= 0) {
+ 2238              		.loc 1 575 0
+ 2239 00f4 039B     		ldr	r3, [sp, #12]
+ 2240 00f6 5345     		cmp	r3, r10
+ 2241 00f8 0DDD     		ble	.L132
+ 2242              	.LVL296:
+ 2243              	.L135:
+ 576:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****             y--;
+ 2244              		.loc 1 576 0
+ 2245 00fa 002D     		cmp	r5, #0
+ 2246 00fc BCDB     		blt	.L134
+ 577:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****             ddF_y += 2;
+ 2247              		.loc 1 577 0
+ 2248 00fe 039B     		ldr	r3, [sp, #12]
+ 2249 0100 013B     		subs	r3, r3, #1
+ 2250 0102 1BB2     		sxth	r3, r3
+ 2251 0104 0393     		str	r3, [sp, #12]
+ 2252              	.LVL297:
+ 578:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****             f += ddF_y;
+ 2253              		.loc 1 578 0
+ 2254 0106 059B     		ldr	r3, [sp, #20]
+ 2255 0108 0233     		adds	r3, r3, #2
+ 2256 010a 9BB2     		uxth	r3, r3
+ 2257 010c 1AB2     		sxth	r2, r3
+ 2258 010e 0592     		str	r2, [sp, #20]
+ 2259              	.LVL298:
+ 579:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****         }
+ 2260              		.loc 1 579 0
+ 2261 0110 1D44     		add	r5, r5, r3
+ 2262              	.LVL299:
+ 2263 0112 2DB2     		sxth	r5, r5
+ 2264              	.LVL300:
+ 2265 0114 B0E7     		b	.L134
+ 2266              	.LVL301:
+ 2267              	.L132:
+ 590:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c ****     }
+ 591:Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c **** }
+ 2268              		.loc 1 591 0
+ 2269 0116 07B0     		add	sp, sp, #28
+ 2270              	.LCFI49:
+ 2271              		.cfi_def_cfa_offset 36
+ 2272              		@ sp needed
+ 2273 0118 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 2274              		.cfi_endproc
+ 2275              	.LFE149:
+ 2277              		.comm	lcdSPI,4,4
+ARM GAS  /tmp/ccYW1LjA.s 			page 54
+
+
+ 2278              		.global	ILI9341_INT_CalledFromPuts
+ 2279              		.comm	ILI9341_Opts,6,4
+ 2280              		.comm	ILI9341_y,2,2
+ 2281              		.comm	ILI9341_x,2,2
+ 2282              		.section	.bss.ILI9341_INT_CalledFromPuts,"aw",%nobits
+ 2285              	ILI9341_INT_CalledFromPuts:
+ 2286 0000 00       		.space	1
+ 2287              		.text
+ 2288              	.Letext0:
+ 2289              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 2290              		.file 3 "/usr/include/newlib/sys/_stdint.h"
+ 2291              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
+ 2292              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ 2293              		.file 6 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h"
+ 2294              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 2295              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 2296              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 2297              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h"
+ 2298              		.file 11 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 2299              		.file 12 "Src/tm_stm32f4_ili9341/tm_stm32f4_fonts.h"
+ 2300              		.file 13 "Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.h"
+ 2301              		.file 14 "<built-in>"
+ARM GAS  /tmp/ccYW1LjA.s 			page 55
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 tm_stm32f4_ili9341.c
+     /tmp/ccYW1LjA.s:18     .text.TM_ILI9341_SendCommand:0000000000000000 $t
+     /tmp/ccYW1LjA.s:25     .text.TM_ILI9341_SendCommand:0000000000000000 TM_ILI9341_SendCommand
+     /tmp/ccYW1LjA.s:81     .text.TM_ILI9341_SendCommand:0000000000000040 $d
+                            *COM*:0000000000000004 lcdSPI
+     /tmp/ccYW1LjA.s:88     .text.TM_ILI9341_DisplayOn:0000000000000000 $t
+     /tmp/ccYW1LjA.s:95     .text.TM_ILI9341_DisplayOn:0000000000000000 TM_ILI9341_DisplayOn
+     /tmp/ccYW1LjA.s:116    .text.TM_ILI9341_DisplayOff:0000000000000000 $t
+     /tmp/ccYW1LjA.s:123    .text.TM_ILI9341_DisplayOff:0000000000000000 TM_ILI9341_DisplayOff
+     /tmp/ccYW1LjA.s:144    .text.TM_ILI9341_SendData:0000000000000000 $t
+     /tmp/ccYW1LjA.s:151    .text.TM_ILI9341_SendData:0000000000000000 TM_ILI9341_SendData
+     /tmp/ccYW1LjA.s:206    .text.TM_ILI9341_SendData:0000000000000040 $d
+     /tmp/ccYW1LjA.s:213    .text.TM_ILI9341_SetCursorPosition:0000000000000000 $t
+     /tmp/ccYW1LjA.s:220    .text.TM_ILI9341_SetCursorPosition:0000000000000000 TM_ILI9341_SetCursorPosition
+     /tmp/ccYW1LjA.s:287    .text.TM_ILI9341_DrawPixel:0000000000000000 $t
+     /tmp/ccYW1LjA.s:294    .text.TM_ILI9341_DrawPixel:0000000000000000 TM_ILI9341_DrawPixel
+     /tmp/ccYW1LjA.s:331    .text.TM_ILI9341_INT_Fill:0000000000000000 $t
+     /tmp/ccYW1LjA.s:338    .text.TM_ILI9341_INT_Fill:0000000000000000 TM_ILI9341_INT_Fill
+     /tmp/ccYW1LjA.s:466    .text.TM_ILI9341_INT_Fill:00000000000000ac $d
+     /tmp/ccYW1LjA.s:475    .text.TM_ILI9341_Fill:0000000000000000 $t
+     /tmp/ccYW1LjA.s:482    .text.TM_ILI9341_Fill:0000000000000000 TM_ILI9341_Fill
+     /tmp/ccYW1LjA.s:518    .text.TM_ILI9341_Fill:0000000000000020 $d
+                            *COM*:0000000000000006 ILI9341_Opts
+     /tmp/ccYW1LjA.s:523    .text.TM_ILI9341_Delay:0000000000000000 $t
+     /tmp/ccYW1LjA.s:530    .text.TM_ILI9341_Delay:0000000000000000 TM_ILI9341_Delay
+     /tmp/ccYW1LjA.s:564    .text.TM_ILI9341_InitLCD:0000000000000000 $t
+     /tmp/ccYW1LjA.s:571    .text.TM_ILI9341_InitLCD:0000000000000000 TM_ILI9341_InitLCD
+     /tmp/ccYW1LjA.s:979    .text.TM_ILI9341_InitLCD:0000000000000258 $d
+     /tmp/ccYW1LjA.s:984    .text.TM_ILI9341_Init:0000000000000000 $t
+     /tmp/ccYW1LjA.s:991    .text.TM_ILI9341_Init:0000000000000000 TM_ILI9341_Init
+     /tmp/ccYW1LjA.s:1074   .text.TM_ILI9341_Init:0000000000000060 $d
+                            *COM*:0000000000000002 ILI9341_y
+                            *COM*:0000000000000002 ILI9341_x
+     /tmp/ccYW1LjA.s:1084   .text.TM_ILI9341_Rotate:0000000000000000 $t
+     /tmp/ccYW1LjA.s:1091   .text.TM_ILI9341_Rotate:0000000000000000 TM_ILI9341_Rotate
+     /tmp/ccYW1LjA.s:1175   .text.TM_ILI9341_Rotate:0000000000000060 $d
+     /tmp/ccYW1LjA.s:1180   .text.TM_ILI9341_GetStringSize:0000000000000000 $t
+     /tmp/ccYW1LjA.s:1187   .text.TM_ILI9341_GetStringSize:0000000000000000 TM_ILI9341_GetStringSize
+     /tmp/ccYW1LjA.s:1248   .text.TM_ILI9341_Putc:0000000000000000 $t
+     /tmp/ccYW1LjA.s:1255   .text.TM_ILI9341_Putc:0000000000000000 TM_ILI9341_Putc
+     /tmp/ccYW1LjA.s:1395   .text.TM_ILI9341_Putc:00000000000000b4 $d
+     /tmp/ccYW1LjA.s:1402   .text.TM_ILI9341_Puts:0000000000000000 $t
+     /tmp/ccYW1LjA.s:1409   .text.TM_ILI9341_Puts:0000000000000000 TM_ILI9341_Puts
+     /tmp/ccYW1LjA.s:1511   .text.TM_ILI9341_Puts:0000000000000070 $d
+     /tmp/ccYW1LjA.s:1517   .text.TM_ILI9341_DrawLine:0000000000000000 $t
+     /tmp/ccYW1LjA.s:1524   .text.TM_ILI9341_DrawLine:0000000000000000 TM_ILI9341_DrawLine
+     /tmp/ccYW1LjA.s:1737   .text.TM_ILI9341_DrawLine:0000000000000104 $d
+     /tmp/ccYW1LjA.s:1742   .text.TM_ILI9341_DrawRectangle:0000000000000000 $t
+     /tmp/ccYW1LjA.s:1749   .text.TM_ILI9341_DrawRectangle:0000000000000000 TM_ILI9341_DrawRectangle
+     /tmp/ccYW1LjA.s:1813   .text.TM_ILI9341_DrawFilledRectangle:0000000000000000 $t
+     /tmp/ccYW1LjA.s:1820   .text.TM_ILI9341_DrawFilledRectangle:0000000000000000 TM_ILI9341_DrawFilledRectangle
+     /tmp/ccYW1LjA.s:1878   .text.TM_ILI9341_DrawFilledRectangle:0000000000000030 $d
+     /tmp/ccYW1LjA.s:1883   .text.TM_ILI9341_DrawCircle:0000000000000000 $t
+     /tmp/ccYW1LjA.s:1890   .text.TM_ILI9341_DrawCircle:0000000000000000 TM_ILI9341_DrawCircle
+     /tmp/ccYW1LjA.s:2086   .text.TM_ILI9341_DrawFilledCircle:0000000000000000 $t
+     /tmp/ccYW1LjA.s:2093   .text.TM_ILI9341_DrawFilledCircle:0000000000000000 TM_ILI9341_DrawFilledCircle
+ARM GAS  /tmp/ccYW1LjA.s 			page 56
+
+
+     /tmp/ccYW1LjA.s:2285   .bss.ILI9341_INT_CalledFromPuts:0000000000000000 ILI9341_INT_CalledFromPuts
+     /tmp/ccYW1LjA.s:2286   .bss.ILI9341_INT_CalledFromPuts:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_WritePin
+HAL_SPI_Transmit
+memset
+HAL_SPI_Transmit_DMA
+HAL_SPI_GetState
+HAL_GPIO_Init
