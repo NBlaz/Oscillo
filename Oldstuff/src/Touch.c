@@ -7,14 +7,13 @@ PosXY readTouch(void){
 	this.x=0;
 	this.y=0;
 	this.Touch=0;
-	//RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
-		//A0 PA0 Y+ Vcc(out)/adc (in)
-		//A1 PA1 X+ Vcc(out)/adc (in)
-		//A2 PA4 Y- Pull/float (out)
-		//D8 PA9 X- Pull/float (out)
 
-		//init pins
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+	//A0 PA0 Y+ Vcc(out)/adc (in)
+	//A1 PA1 X+ Vcc(out)/adc (in)
+	//A2 PA4 Y- Pull/float (out)
+	//D8 PA9 X- Pull/float (out)
+
+	//init pins
 	GPIO_InitTypeDef GPIOstruct;
 	GPIOstruct.GPIO_Pin=GPIO_Pin_0;
 	GPIOstruct.GPIO_Mode=GPIO_Mode_OUT;
@@ -30,8 +29,8 @@ PosXY readTouch(void){
 	GPIO_Init(GPIOA,&GPIOstruct);
 	GPIO_ResetBits(GPIOA,GPIO_Pin_4);
 
-	GPIOstruct.GPIO_Pin=GPIO_Pin_9;
-	GPIOstruct.GPIO_Mode=GPIO_Mode_IN;
+	GPIOstruct.Pin=GPIO_Pin_9;
+	GPIOstruct.Mode=GPIO_MODE_INPUT;
 	GPIOstruct.GPIO_OType=GPIO_OType_PP;
 	GPIOstruct.GPIO_Speed=GPIO_Speed_25MHz;
 	GPIOstruct.GPIO_PuPd=GPIO_PuPd_UP;

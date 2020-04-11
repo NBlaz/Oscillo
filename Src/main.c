@@ -21,6 +21,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "ux.h"
+#include "touch.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -42,28 +44,37 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
 SPI_HandleTypeDef hspi1;
 DMA_HandleTypeDef hdma_spi1_rx;
 DMA_HandleTypeDef hdma_spi1_tx;
 
 typedef StaticTask_t osStaticThreadDef_t;
+
 osThreadId_t defaultTaskHandle;
 uint32_t defaultTaskBuffer[ 128 ];
 osStaticThreadDef_t defaultTaskControlBlock;
+
 osThreadId_t myTask02Handle;
 uint32_t myTask02Buffer[ 128 ];
 osStaticThreadDef_t myTask02ControlBlock;
+
+osThreadId_t myTask03Handle;
+uint32_t myTask03Buffer[ 128 ];
+osStaticThreadDef_t myTask03ControlBlock;
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static void MX_ADC1_Init(void);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void MX_SPI1_Init(void);
 void StartDefaultTask(void *argument);
 void StartTask02(void *argument);
+void StartTask03(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -80,40 +91,28 @@ void StartTask02(void *argument);
   */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
-
-  /* USER CODE END 1 */
-  
-
-  /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
 
   /* Configure the system clock */
   SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
-
-  /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_SPI1_Init();
-
+  MX_ADC1_Init();
   TM_ILI9341_Init(&hspi1);
-  //TM_ILI9341_Fill(ILI9341_COLOR_BLACK);
+  TM_ILI9341_Rotate(TM_ILI9341_Orientation_Landscape_2);
 
-  
-  /* USER CODE BEGIN 2 */
-
-  /* USER CODE END 2 */
-  TM_ILI9341_DrawLine(0,0,56,32,ILI9341_COLOR_RED);
+  TM_ILI9341_DrawFilledCircle(10, 10,  10, ILI9341_COLOR_WHITE);
+  TM_ILI9341_DrawFilledCircle(310, 10,  10, ILI9341_COLOR_RED);
+  TM_ILI9341_DrawFilledCircle(10, 230,  10, ILI9341_COLOR_BLUE);
+  TM_ILI9341_DrawFilledCircle(310, 230,  10, ILI9341_COLOR_YELLOW);
+  touchInit(&hadc1);
 
   osKernelInitialize();
 
@@ -152,27 +151,30 @@ int main(void)
     .stack_size = sizeof(myTask02Buffer),
     .cb_mem = &myTask02ControlBlock,
     .cb_size = sizeof(myTask02ControlBlock),
-    .priority = (osPriority_t) osPriorityLow,
+    .priority = (osPriority_t) osPriorityNormal1,
   };
   myTask02Handle = osThreadNew(StartTask02, NULL, &myTask02_attributes);
 
-  /* USER CODE BEGIN RTOS_THREADS */
-  /* add threads, ... */
-  /* USER CODE END RTOS_THREADS */
+  /* definition and creation of myTask02 */
+  const osThreadAttr_t myTask03_attributes = {
+    .name = "myTask03",
+    .stack_mem = &myTask03Buffer[0],
+    .stack_size = sizeof(myTask03Buffer),
+    .cb_mem = &myTask03ControlBlock,
+    .cb_size = sizeof(myTask03ControlBlock),
+    .priority = (osPriority_t) osPriorityNormal,
+  };
+  myTask03Handle = osThreadNew(StartTask03, NULL, &myTask03_attributes);
 
-  /* Start scheduler */
+
+
   osKernelStart();
   
   /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
-  }
+  while (1){}
   /* USER CODE END 3 */
 }
 
@@ -225,6 +227,57 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 }
+
+/**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
+  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc1.Init.ScanConvMode = DISABLE;
+  hadc1.Init.ContinuousConvMode = DISABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Channel = ADC_CHANNEL_0;
+  sConfig.Rank = 1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
+
+}
+
 
 /**
   * @brief SPI1 Initialization Function
@@ -302,7 +355,7 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pin = B1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+  //HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
 }
 
@@ -317,13 +370,17 @@ static void MX_GPIO_Init(void)
   * @retval None
   */
 /* USER CODE END Header_StartDefaultTask */
+PosXY pos;
 
 void StartDefaultTask(void *argument)
 {
+
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
   for(;;)
   {
+    //refresh_screen();
+    TM_ILI9341_DrawPixel(pos.x, pos.y, ILI9341_COLOR_GREEN2);
     osDelay(1);
   }
   /* USER CODE END 5 */ 
@@ -340,8 +397,26 @@ void StartTask02(void *argument)
 {
   /* USER CODE BEGIN StartTask02 */
   /* Infinite loop */
+  
+
   for(;;)
   {
+      
+ 
+    pos = readTouch();
+  
+    osDelay(1);
+  }
+  /* USER CODE END StartTask02 */
+}
+
+void StartTask03(void *argument)
+{
+  /* USER CODE BEGIN StartTask02 */
+  /* Infinite loop */
+  for(;;)
+  {
+    //TM_ILI9341_Fill(ILI9341_COLOR_GREEN2);
     osDelay(1);
   }
   /* USER CODE END StartTask02 */
@@ -376,7 +451,7 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
-
+  TM_ILI9341_Puts(20,26,"ERROR",&TM_Font_7x10,ILI9341_COLOR_RED,ILI9341_COLOR_BLACK);
   /* USER CODE END Error_Handler_Debug */
 }
 

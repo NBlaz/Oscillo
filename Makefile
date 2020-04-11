@@ -36,17 +36,13 @@ BUILD_DIR = build
 ######################################
 # C sources
 C_SOURCES =  \
-Src/main.c \
-Src/freertos.c \
-Src/stm32f4xx_it.c \
-Src/stm32f4xx_hal_msp.c \
-Src/stm32f4xx_hal_timebase_tim.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c \
@@ -56,9 +52,7 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c \
-Src/system_stm32f4xx.c \
-Src/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c \
-Src/tm_stm32f4_ili9341/tm_stm32f4_fonts.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c \
 Middlewares/Third_Party/FreeRTOS/Source/croutine.c \
 Middlewares/Third_Party/FreeRTOS/Source/event_groups.c \
 Middlewares/Third_Party/FreeRTOS/Source/list.c \
@@ -69,7 +63,17 @@ Middlewares/Third_Party/FreeRTOS/Source/timers.c \
 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c \
 Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c \
 Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c \
-Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c
+Src/main.c \
+Src/os/freertos.c \
+Src/syscfg/stm32f4xx_it.c \
+Src/syscfg/stm32f4xx_hal_msp.c \
+Src/syscfg/stm32f4xx_hal_timebase_tim.c \
+Src/syscfg/system_stm32f4xx.c \
+Src/display/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c \
+Src/display/tm_stm32f4_ili9341/tm_stm32f4_fonts.c \
+Src/display/ux.c \
+Src/touch/touch.c 
+
 
 # ASM sources
 ASM_SOURCES =  \
@@ -127,7 +131,6 @@ AS_INCLUDES =  \
 
 # C includes
 C_INCLUDES =  \
--IInc \
 -IDrivers/STM32F4xx_HAL_Driver/Inc \
 -IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy \
 -IMiddlewares/Third_Party/FreeRTOS/Source/include \
@@ -135,8 +138,12 @@ C_INCLUDES =  \
 -IMiddlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F \
 -IDrivers/CMSIS/Device/ST/STM32F4xx/Include \
 -IDrivers/CMSIS/Include \
--ISrc/tm_stm32f4_ili9341
-
+-ISrc \
+-ISrc/os \
+-ISrc/syscfg \
+-ISrc/display \
+-ISrc/display/tm_stm32f4_ili9341 \
+-ISrc/touch
 
 
 # compile gcc flags
@@ -203,6 +210,11 @@ $(BUILD_DIR):
 #######################################
 flash:
 	st-flash write ./build/TemplateProjekt.bin 0x8000000
+
+#######################################
+# Compile and flash
+#######################################
+full: all flash
 #######################################
 # clean up
 #######################################
