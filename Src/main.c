@@ -258,7 +258,7 @@ static void MX_ADC1_Init(void)
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc1.Init.NbrOfConversion = 1;
   hadc1.Init.DMAContinuousRequests = DISABLE;
-  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  hadc1.Init.EOCSelection = ADC_EOC_SEQ_CONV;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
   {
     Error_Handler();
@@ -356,7 +356,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   //HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
-
 }
 
 /* USER CODE BEGIN 4 */
@@ -371,7 +370,7 @@ static void MX_GPIO_Init(void)
   */
 /* USER CODE END Header_StartDefaultTask */
 PosXY pos;
-
+char uni[3];
 void StartDefaultTask(void *argument)
 {
 
@@ -379,8 +378,8 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    //refresh_screen();
-    TM_ILI9341_DrawPixel(pos.x, pos.y, ILI9341_COLOR_GREEN2);
+    //refresh_screen();  
+    
     osDelay(1);
   }
   /* USER CODE END 5 */ 
@@ -393,18 +392,28 @@ void StartDefaultTask(void *argument)
 * @retval None
 */
 /* USER CODE END Header_StartTask02 */
+uint32_t color=0;
 void StartTask02(void *argument)
 {
   /* USER CODE BEGIN StartTask02 */
   /* Infinite loop */
   
-
   for(;;)
   {
-      
- 
+
     pos = readTouch();
-  
+    osDelay(1);
+    color+=1000;
+    if(pos.active_touch == 1){
+      TM_ILI9341_DrawPixel(pos.x, pos.y, color);
+      TM_ILI9341_Puts(100,100,"on",&TM_Font_7x10,ILI9341_COLOR_GREEN,ILI9341_COLOR_BLACK);
+      if (color == 0xFFFF){
+      color = 0;
+      }
+    }
+    else{
+      TM_ILI9341_Puts(100,100,"off",&TM_Font_7x10,ILI9341_COLOR_RED,ILI9341_COLOR_BLACK);
+    }
     osDelay(1);
   }
   /* USER CODE END StartTask02 */

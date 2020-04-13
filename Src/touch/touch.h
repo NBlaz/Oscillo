@@ -13,9 +13,9 @@
 #include "main.h"
 
 typedef struct {
-	int x;
-	int y;
-	int Touch;
+	uint16_t x;
+	uint16_t y;
+	uint8_t active_touch;
 }PosXY;
 
 ADC_HandleTypeDef* touchADC;
