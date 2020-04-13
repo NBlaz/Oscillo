@@ -64,7 +64,7 @@ Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c \
 Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c \
 Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c \
 Src/main.c \
-Src/os/freertos.c \
+Src/os/os.c \
 Src/syscfg/stm32f4xx_it.c \
 Src/syscfg/stm32f4xx_hal_msp.c \
 Src/syscfg/stm32f4xx_hal_timebase_tim.c \

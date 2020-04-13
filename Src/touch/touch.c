@@ -4,12 +4,7 @@ void touchInit(ADC_HandleTypeDef* touchADCin){
 	touchADC = touchADCin;
 }
 
-PosXY readTouch(void){
-	PosXY this;
-	int i;
-	this.x=0;
-	this.y=0;
-	this.active_touch=0;
+void readTouch(void){
 
 	//A0 PA0 Y+ Vcc(out)/adc (in)
 	//A1 PA1 X+ Vcc(out)/adc (in)
@@ -57,7 +52,7 @@ PosXY readTouch(void){
 		Error_Handler();
 	}
 	
-	this.x=HAL_ADC_GetValue(touchADC);
+	m_touch.x=HAL_ADC_GetValue(touchADC);
 	
 	if(HAL_ADC_Stop(touchADC) != HAL_OK){
 		Error_Handler();
@@ -98,25 +93,27 @@ PosXY readTouch(void){
 		Error_Handler();
 	}
 	
-	this.y=HAL_ADC_GetValue(touchADC);
+	m_touch.y=HAL_ADC_GetValue(touchADC);
 	
 	if(HAL_ADC_Stop(touchADC) != HAL_OK){
 		Error_Handler();
 	}
 	
-	this.x=(this.x-500)/10.5;
-	this.y=240-(this.y-680)/12.4;
+	m_touch.x=(m_touch.x-500)/10.5;
+	m_touch.y=240-(m_touch.y-680)/12.4;
 	
-	if(this.y<0)
-		this.y=0;
-	if(this.y >240)
-		this.y=240;
+	if(m_touch.y<0)
+		m_touch.y=0;
+	if(m_touch.y >240)
+		m_touch.y=240;
 
-	if(this.x>5||this.y<240)
-		this.active_touch=1;
+	if(m_touch.x>5||m_touch.y<240)
+		m_touch.active_touch=1;
 	else
-		this.active_touch=0;
-	
-	return this;
-
+		m_touch.active_touch=0;
 }
+
+PosXY getTouch(void){
+	return m_touch;
+}
+

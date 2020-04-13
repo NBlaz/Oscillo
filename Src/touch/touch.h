@@ -10,7 +10,6 @@
 #define __TOUCH_H__
 
 #include "stm32f4xx_hal.h"
-#include "main.h"
 
 typedef struct {
 	uint16_t x;
@@ -18,11 +17,13 @@ typedef struct {
 	uint8_t active_touch;
 }PosXY;
 
+PosXY m_touch;
+
 ADC_HandleTypeDef* touchADC;
 
 void touchInit(ADC_HandleTypeDef* touchADCin);
-PosXY readTouch(void);
-
+void readTouch(void);
+PosXY getTouch(void);
 
 #endif
 
