@@ -53,26 +53,26 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c \
-Middlewares/Third_Party/FreeRTOS/Source/croutine.c \
-Middlewares/Third_Party/FreeRTOS/Source/event_groups.c \
-Middlewares/Third_Party/FreeRTOS/Source/list.c \
-Middlewares/Third_Party/FreeRTOS/Source/queue.c \
-Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c \
-Middlewares/Third_Party/FreeRTOS/Source/tasks.c \
-Middlewares/Third_Party/FreeRTOS/Source/timers.c \
-Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c \
-Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c \
-Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c \
+FreeRTOS/Source/croutine.c \
+FreeRTOS/Source/event_groups.c \
+FreeRTOS/Source/list.c \
+FreeRTOS/Source/queue.c \
+FreeRTOS/Source/stream_buffer.c \
+FreeRTOS/Source/tasks.c \
+FreeRTOS/Source/timers.c \
+FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c \
+FreeRTOS/Source/portable/MemMang/heap_4.c \
+FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c \
 Src/main.c \
 Src/os/os.c \
 Src/syscfg/stm32f4xx_it.c \
 Src/syscfg/stm32f4xx_hal_msp.c \
 Src/syscfg/stm32f4xx_hal_timebase_tim.c \
 Src/syscfg/system_stm32f4xx.c \
-Src/display/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c \
-Src/display/tm_stm32f4_ili9341/tm_stm32f4_fonts.c \
-Src/display/ux.c \
-Src/touch/touch.c 
+Src/ux/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c \
+Src/ux/tm_stm32f4_ili9341/tm_stm32f4_fonts.c \
+Src/ux/ux.c \
+Src/ux/touch/touch.c 
 
 
 # ASM sources
@@ -133,23 +133,23 @@ AS_INCLUDES =  \
 C_INCLUDES =  \
 -IDrivers/STM32F4xx_HAL_Driver/Inc \
 -IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy \
--IMiddlewares/Third_Party/FreeRTOS/Source/include \
--IMiddlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 \
--IMiddlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F \
+-IFreeRTOS/Source/include \
+-IFreeRTOS/Source/CMSIS_RTOS_V2 \
+-IFreeRTOS/Source/portable/GCC/ARM_CM4F \
 -IDrivers/CMSIS/Device/ST/STM32F4xx/Include \
 -IDrivers/CMSIS/Include \
 -ISrc \
 -ISrc/os \
 -ISrc/syscfg \
--ISrc/display \
--ISrc/display/tm_stm32f4_ili9341 \
--ISrc/touch
+-ISrc/ux \
+-ISrc/ux/tm_stm32f4_ili9341 \
+-ISrc/ux/touch
 
 
 # compile gcc flags
-ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections 
 
-CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections 
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -g -gdwarf-2

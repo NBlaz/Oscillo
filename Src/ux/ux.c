@@ -7,14 +7,20 @@
   */
 #include "ux.h"
 
+uint16_t color=0xFB00;
 void refresh_screen(void){
 	PosXY pos;
 	pos = getTouch();
+
     if(pos.active_touch == 1){
-      TM_ILI9341_DrawPixel(pos.x, pos.y, ILI9341_COLOR_BLUE);
-      TM_ILI9341_Puts(100,100,"on",&TM_Font_7x10,ILI9341_COLOR_GREEN,ILI9341_COLOR_BLACK);
+      TM_ILI9341_DrawFilledCircle(10, 10,  10, ILI9341_COLOR_GREEN);
+      while(getTouch().active_touch ==1){
+      	color ++;
+      	TM_ILI9341_DrawPixel(getTouch().x, getTouch().y, color);
+      }
+      
     }
     else{
-      TM_ILI9341_Puts(100,100,"off",&TM_Font_7x10,ILI9341_COLOR_RED,ILI9341_COLOR_BLACK);
+      TM_ILI9341_DrawFilledCircle(10, 10,  10, ILI9341_COLOR_RED);
     }
 }

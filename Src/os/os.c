@@ -54,7 +54,7 @@ void os_create_tasks(void){
     .stack_size = sizeof(myTask02Buffer),
     .cb_mem = &myTask02ControlBlock,
     .cb_size = sizeof(myTask02ControlBlock),
-    .priority = (osPriority_t) osPriorityNormal1,
+    .priority = (osPriority_t) osPriorityNormal,
   };
   myTask02Handle = osThreadNew(StartTask02, NULL, &myTask02_attributes);
 
