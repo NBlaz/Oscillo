@@ -72,7 +72,9 @@ Src/syscfg/system_stm32f4xx.c \
 Src/ux/tm_stm32f4_ili9341/tm_stm32f4_ili9341.c \
 Src/ux/tm_stm32f4_ili9341/tm_stm32f4_fonts.c \
 Src/ux/ux.c \
-Src/ux/touch/touch.c 
+Src/ux/touch/touch.c \
+Src/sampler/adc_input/adc_input.c \
+Src/sampler/sampler.c
 
 
 # ASM sources
@@ -143,7 +145,9 @@ C_INCLUDES =  \
 -ISrc/syscfg \
 -ISrc/ux \
 -ISrc/ux/tm_stm32f4_ili9341 \
--ISrc/ux/touch
+-ISrc/ux/touch \
+-ISrc/sampler \
+-ISrc/sampler/adc_input
 
 
 # compile gcc flags
