@@ -93,7 +93,7 @@ void StartTask02(void *argument)
   for(;;)
   {    
     refresh_screen();
-    osDelay(1);
+    //osDelay(1);
   }
   /* USER CODE END StartTask02 */
 }
@@ -104,7 +104,7 @@ void StartTask03(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    //TM_ILI9341_Fill(ILI9341_COLOR_GREEN2);
+    update_samples();
     osDelay(1);
   }
   /* USER CODE END StartTask02 */

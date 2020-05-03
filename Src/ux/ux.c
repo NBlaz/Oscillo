@@ -10,7 +10,8 @@
 uint16_t color=0xFB00;
 uint8_t oonce = 0;
 
-uint16_t displaybuffer[300]={0};
+static volatile s_sample adcMeasure;
+
 void refresh_screen(void){
 	PosXY pos;
 	pos = getTouch();
@@ -28,10 +29,14 @@ void refresh_screen(void){
     drawSideMenu();
 
     TM_ILI9341_DrawFilledRectangle(0, 21, 279, 240, ILI9341_COLOR_BLACK);
+    request_new_sample(&adcMeasure);
     oonce=1;
   }
 
-  drawWaveForm();
+  if(adcMeasure.ready == 1){
+    drawWaveForm();
+    request_new_sample(&adcMeasure);
+  }  
 
   if(pos.active_touch == 1){
     TM_ILI9341_DrawFilledCircle(10, 10,  10, ILI9341_COLOR_GREEN);
@@ -57,20 +62,10 @@ void drawSideMenu(void){
 }
 
 void drawWaveForm(void){
-  
-    uint16_t val,val2;
-    TM_ILI9341_DrawFilledRectangle(0, 21, 280, 240, ILI9341_COLOR_BLACK);
-  for(int i=0; i<299; i+=2){
-    
-    val = adc_buffer[i]/10;
-    val2 = adc_buffer[i+1]/10; 
+  for(int i=0; i<300; i++){
 
-    //TM_ILI9341_DrawPixel(i, 50  + displaybuffer[i], ILI9341_COLOR_BLACK);
-    //TM_ILI9341_DrawPixel(i, 50 + val, ILI9341_COLOR_YELLOW);
-    
-    displaybuffer[i] = val;
-    TM_ILI9341_DrawLine(i, 25 + val, i+1, 25+ val2, ILI9341_COLOR_YELLOW);
-
+    TM_ILI9341_DrawFilledRectangle(i+1, 21, i+2, 240, ILI9341_COLOR_BLACK);
+    TM_ILI9341_DrawLine(i, 50 + adcMeasure.voltage[i], i+1, 50 + adcMeasure.voltage[i+1], ILI9341_COLOR_YELLOW);
   }
 
 }

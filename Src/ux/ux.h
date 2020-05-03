@@ -13,6 +13,8 @@
 #include "tm_stm32f4_ili9341.h"
 #include "touch.h"
 #include "adc_input.h"
+#include "sampler.h"
+#include "os.h"
 
 void refresh_screen(void);
 

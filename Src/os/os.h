@@ -5,6 +5,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "touch.h"
+#include "sampler.h"
 #include "ux.h"
 
 typedef StaticTask_t osStaticThreadDef_t;
