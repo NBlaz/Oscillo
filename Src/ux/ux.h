@@ -17,11 +17,10 @@
 #include "os.h"
 
 void refresh_screen(void);
-
 void drawUpperMenu(void);
-
+void time_scale_scroll(void);
+void amp_scale_scroll(void);
 void drawSideMenu(void);
-
 void drawWaveForm(void);
 
 #endif
